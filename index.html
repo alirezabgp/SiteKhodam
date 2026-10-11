@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سامانه استعلام آنی و برآورد هزینه خدمات</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
         :root {
             --primary-color: #0d6efd;
@@ -16,7 +16,7 @@
         }
 
         body {
-            font-family: Tahoma, 'Segoe UI', Geneva, Verdana, sans-serif;
+            font-family: 'Vazirmatn', Tahoma, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
@@ -33,7 +33,7 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.08);
         }
 
-        /* Progress Bar */
+        /* نوار پیشرفت */
         .progressbar {
             display: flex;
             justify-content: space-between;
@@ -76,7 +76,6 @@
             color: white;
         }
 
-        /* Step Content */
         .step {
             display: none;
         }
@@ -97,7 +96,6 @@
 
         input[type="text"],
         input[type="number"],
-        input[type="date"],
         select,
         textarea {
             width: 100%;
@@ -105,7 +103,7 @@
             border: 1px solid var(--border-color);
             border-radius: 6px;
             box-sizing: border-box;
-            font-family: inherit;
+            font-family: 'Vazirmatn', Tahoma, sans-serif;
         }
 
         .radio-group {
@@ -129,7 +127,6 @@
             background-color: #f0f7ff;
         }
 
-        /* Buttons Navigation */
         .btn-group {
             display: flex;
             justify-content: space-between;
@@ -143,22 +140,17 @@
             font-size: 15px;
             font-weight: bold;
             cursor: pointer;
+            font-family: 'Vazirmatn', Tahoma, sans-serif;
         }
 
         .btn-next { background-color: var(--primary-color); color: white; }
         .btn-prev { background-color: #6c757d; color: white; }
         .btn-submit { background-color: var(--success-color); color: white; }
 
-        .otp-box {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
         .notice-box {
-            background-color: #fff3cd;
-            border: 1px solid #ffe69c;
-            color: #664d03;
+            background-color: #e2f0d9;
+            border: 1px solid #c8e1b9;
+            color: #274e13;
             padding: 12px;
             border-radius: 6px;
             font-size: 13px;
@@ -169,17 +161,13 @@
 <body>
 
 <div class="wizard-card">
-    <h2 style="text-align: center; color: #0d6efd; margin-top: 0;">ثبت فایل و استعلام قیمت</h2>
-    
-    <div class="notice-box">
-        💡 <strong>راهنما:</strong> جهت حفظ کیفیت خدمات، امکان ثبت <strong>۲ استعلام رایگان در ماه</strong> برای هر شماره همراه پیش‌بینی شده است. برای مجموعه‌نقشه‌ها لطفاً همه فایل‌ها را در قالب یک فایل ZIP بارگذاری کنید.
-    </div>
+    <h2 style="text-align: center; color: #0d6efd; margin-top: 0;">سامانه استعلام قیمت خدمات</h2>
 
     <!-- نوار پیشرفت -->
     <ul class="progressbar">
         <li class="active">بارگذاری فایل</li>
         <li>مشخصات فنی</li>
-        <li>زمان و شرایط</li>
+        <li>زمان و موقعیت</li>
         <li>تایید و ثبت</li>
     </ul>
 
@@ -190,8 +178,8 @@
             <div class="form-group">
                 <label>نوع سفارش خود را مشخص کنید:</label>
                 <div class="radio-group">
-                    <label class="radio-option"><input type="radio" name="orderType" value="single" checked> تک‌قطعه / تک‌نقشه</label>
-                    <label class="radio-option"><input type="radio" name="orderType" value="assembly"> مجموعه قطعات (چند نقشه در قالب ZIP)</label>
+                    <label class="radio-option"><input type="radio" name="orderType" value="single" checked> تک نقشه</label>
+                    <label class="radio-option"><input type="radio" name="orderType" value="assembly"> مجموعه قطعات (چند نقشه در فایل ZIP)</label>
                 </div>
             </div>
 
@@ -206,7 +194,7 @@
             </div>
             
             <div class="btn-group">
-                <div></div> <!-- خالی برای حفظ چیدمان -->
+                <div></div>
                 <button type="button" class="btn btn-next" onclick="nextStep(1)">مرحله بعدی ➔</button>
             </div>
         </div>
@@ -214,7 +202,7 @@
         <!-- گام ۲: مشخصات فنی -->
         <div class="step">
             <div class="form-group">
-                <label for="quantity">تعداد / تراژ کل (عدد):</label>
+                <label for="quantity">تیراژ کل (تعداد قطعه):</label>
                 <input type="number" id="quantity" min="1" value="1" required>
             </div>
 
@@ -240,16 +228,26 @@
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-prev" onclick="prevStep(2)">🠘 مرحله قبلی</button>
+                <button type="button" class="btn btn-prev" onclick="prevStep(2)">← مرحله قبلی</button>
                 <button type="button" class="btn btn-next" onclick="nextStep(2)">مرحله بعدی ➔</button>
             </div>
         </div>
 
-        <!-- گام ۳: زمان‌بندی و سوابق -->
+        <!-- گام ۳: زمان‌بندی، شهر و سوابق -->
         <div class="step">
             <div class="form-group">
-                <label for="deadline">تا چه زمانی فرصت انجام کار هست؟ (مهلت تحویل):</label>
-                <input type="date" id="deadline" required>
+                <label for="city">شهر محل سکونت / فعالیت:</label>
+                <select id="city" required>
+                    <option value="tehran">تهران</option>
+                    <option value="alborz">البرز (کرج و حومه)</option>
+                    <option value="other">سایر شهرهای کشور</option>
+                </select>
+                <p style="font-size: 11px; color: #6c757d; margin-top: 4px;">* در حال حاضر خدمات اصلی مستقیماً در تهران و البرز ارائه می‌شود.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="deadline">مهلت مورد انتظار برای انجام کار:</label>
+                <input type="text" id="deadline" placeholder="مثلاً: حداکثر تا ۱۰ روز آینده یا تاریخ دلخواه" required>
             </div>
 
             <div class="form-group">
@@ -258,15 +256,19 @@
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-prev" onclick="prevStep(3)">🠘 مرحله قبلی</button>
+                <button type="button" class="btn btn-prev" onclick="prevStep(3)">← مرحله قبلی</button>
                 <button type="button" class="btn btn-next" onclick="nextStep(3)">مرحله بعدی ➔</button>
             </div>
         </div>
 
         <!-- گام ۴: تایید شماره موبایل با SMS -->
         <div class="step">
+            <div class="notice-box">
+                ℹ️ لطفاً شماره همراه خود را وارد کنید تا کد تأیید برای شما ارسال شود.
+            </div>
+
             <div class="form-group">
-                <label for="phone">شماره همراه (جهت احراز هویت و ارسال برآورد):</label>
+                <label for="phone">شماره همراه:</label>
                 <input type="text" id="phone" placeholder="۰۹۱۲۳۴۵۶۷۸۹" required>
             </div>
 
@@ -278,8 +280,8 @@
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-prev" onclick="prevStep(4)">🠘 مرحله قبلی</button>
-                <button type="submit" class="btn btn-submit">ثبت نهایی و دریافت برآورد</button>
+                <button type="button" class="btn btn-prev" onclick="prevStep(4)">← مرحله قبلی</button>
+                <button type="submit" class="btn btn-submit">ثبت نهایی درخواست</button>
             </div>
         </div>
 
@@ -329,11 +331,9 @@
 
     document.getElementById("multiStepForm").addEventListener("submit", function(e) {
         e.preventDefault();
-        alert("درخواست شما با موفقیت ثبت شد! کد پیگیری برای شما پیامک خواهد شد.");
+        alert("درخواست شما با موفقیت ثبت شد! نتیجه برآورد هزینه و زمان، طی ۱ تا ۲ روز کاری آینده از طریق پیامک یا تماس به اطلاع شما خواهد رسید.");
     });
 </script>
 
 </body>
 </html>
-
-
