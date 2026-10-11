@@ -35,7 +35,7 @@
             border: 1px solid rgba(0,0,0,0.03);
         }
 
-        /* نوار پیشرفت مدرن و خطی */
+        /* نوار پیشرفت خطی */
         .progress-container {
             margin-bottom: 25px;
         }
@@ -202,7 +202,7 @@
 
 <div class="wizard-card">
     
-    <!-- نوار پیشرفت مدرن و خطی -->
+    <!-- نوار پیشرفت -->
     <div class="progress-container">
         <div class="progress-info">
             <span id="progressText">مرحله ۱ از ۴: بارگذاری فایل</span>
@@ -220,10 +220,10 @@
             <div class="step-heading">📁 بارگذاری فایل نقشه</div>
             
             <div class="form-group">
-                <label>نوع سفارش خود را مشخص کنید:</label>
+                <label>نوع سفارش خود را مشخص کنید: *</label>
                 <div class="radio-group">
-                    <label class="radio-option"><input type="radio" name="orderType" value="single" checked> تک نقشه</label>
-                    <label class="radio-option"><input type="radio" name="orderType" value="assembly"> مجموعه قطعات (چند نقشه در فایل ZIP)</label>
+                    <label class="radio-option"><input type="radio" name="orderType" value="single" required> تک نقشه</label>
+                    <label class="radio-option"><input type="radio" name="orderType" value="assembly" required> مجموعه قطعات (چند نقشه در فایل ZIP)</label>
                 </div>
             </div>
 
@@ -240,7 +240,7 @@
             
             <div class="btn-group">
                 <div></div>
-                <button type="button" class="btn btn-next" onclick="nextStep(1)">ادامه مسیر ➔</button>
+                <button type="button" class="btn btn-next" onclick="nextStep(1)">ادامه</button>
             </div>
         </div>
 
@@ -250,7 +250,7 @@
 
             <div class="form-group">
                 <label for="quantity">تیراژ کل (تعداد قطعه): *</label>
-                <input type="number" id="quantity" min="1" value="1" required>
+                <input type="number" id="quantity" min="1" placeholder="مثلاً: ۱۰" required>
             </div>
 
             <div class="form-group">
@@ -274,6 +274,7 @@
             <div class="form-group">
                 <label for="city">شهر: *</label>
                 <select id="city" required>
+                    <option value="">انتخاب کنید...</option>
                     <option value="tehran">تهران</option>
                     <option value="alborz">البرز (کرج و حومه)</option>
                     <option value="other">سایر شهرهای کشور</option>
@@ -299,24 +300,24 @@
             </div>
 
             <div class="form-group">
-                <label>تامین متریال بر عهده چه کسی است؟</label>
+                <label>تامین متریال بر عهده چه کسی است؟ *</label>
                 <div class="radio-group">
-                    <label class="radio-option"><input type="radio" name="materialSupply" value="workshop" checked> مجموعه شما تامین کند</label>
-                    <label class="radio-option"><input type="radio" name="materialSupply" value="customer"> خودم ارسال می‌کنم</label>
+                    <label class="radio-option"><input type="radio" name="materialSupply" value="workshop" required> مجموعه شما تامین کند</label>
+                    <label class="radio-option"><input type="radio" name="materialSupply" value="customer" required> خودم ارسال می‌کنم</label>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>نیاز به ساخت نمونه دارید؟</label>
+                <label>نیاز به ساخت نمونه دارید؟ *</label>
                 <div class="radio-group">
-                    <label class="radio-option"><input type="radio" name="sampleNeeded" value="no" checked> خیر</label>
-                    <label class="radio-option"><input type="radio" name="sampleNeeded" value="yes"> بله</label>
+                    <label class="radio-option"><input type="radio" name="sampleNeeded" value="no" required> خیر</label>
+                    <label class="radio-option"><input type="radio" name="sampleNeeded" value="yes" required> بله</label>
                 </div>
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-prev" onclick="prevStep(2)">⬅ بازگشت</button>
-                <button type="button" class="btn btn-next" onclick="nextStep(2)">ادامه مسیر ➔</button>
+                <button type="button" class="btn btn-prev" onclick="prevStep(2)">بازگشت</button>
+                <button type="button" class="btn btn-next" onclick="nextStep(2)">ادامه</button>
             </div>
         </div>
 
@@ -327,8 +328,9 @@
             <div class="form-group">
                 <label for="deadline">مهلت مورد انتظار برای انجام کار: *</label>
                 <select id="deadline" required>
+                    <option value="">انتخاب کنید...</option>
                     <option value="urgent">فوری (حداکثر ۱ تا ۲ روز کاری)</option>
-                    <option value="normal" selected>عادی (۳ تا ۵ روز کاری)</option>
+                    <option value="normal">عادی (۳ تا ۵ روز کاری)</option>
                     <option value="week">یک هفته کاری</option>
                     <option value="twoweeks">دو هفته کاری یا بیشتر</option>
                     <option value="flexible">توافقی / بسته به نظر کارشناس</option>
@@ -341,8 +343,8 @@
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-prev" onclick="prevStep(3)">⬅ بازگشت</button>
-                <button type="button" class="btn btn-next" onclick="nextStep(3)">ادامه مسیر ➔</button>
+                <button type="button" class="btn btn-prev" onclick="prevStep(3)">بازگشت</button>
+                <button type="button" class="btn btn-next" onclick="nextStep(3)">ادامه</button>
             </div>
         </div>
 
@@ -367,7 +369,7 @@
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-prev" onclick="prevStep(4)">⬅ بازگشت</button>
+                <button type="button" class="btn btn-prev" onclick="prevStep(4)">بازگشت</button>
                 <button type="submit" class="btn btn-submit">ثبت نهایی درخواست 🎉</button>
             </div>
         </div>
@@ -394,7 +396,6 @@
             step.classList.toggle("active", index === stepIndex);
         });
 
-        // آپدیت کردن نوار پیشرفت پویا
         progressText.innerText = stepInfo[stepIndex].text;
         progressPercent.innerText = stepInfo[stepIndex].percent;
         progressBarFill.style.width = stepInfo[stepIndex].width;
@@ -423,8 +424,9 @@
 
     function validateStep(stepIndex) {
         const currentStepElement = steps[stepIndex];
-        const requiredInputs = currentStepElement.querySelectorAll("[required]");
         
+        // بررسی ورودی‌های متنی و کشویی
+        const requiredInputs = currentStepElement.querySelectorAll("input[required]:not([type='radio']), select[required]");
         for (let input of requiredInputs) {
             if (!input.value || input.value.trim() === "") {
                 input.focus();
@@ -432,6 +434,17 @@
                 return false;
             }
         }
+
+        // بررسی دکمه‌های رادیویی اجباری (Radio Buttons)
+        const radioGroups = currentStepElement.querySelectorAll(".radio-group");
+        for (let group of radioGroups) {
+            const checked = group.querySelector("input[type='radio']:checked");
+            if (!checked) {
+                alert("لطفاً یکی از گزینه‌های موجود را انتخاب کنید.");
+                return false;
+            }
+        }
+
         return true;
     }
 
