@@ -142,9 +142,6 @@
             font-weight: bold;
             cursor: pointer;
             font-family: 'Vazirmatn', Tahoma, sans-serif;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .btn-next { background-color: var(--primary-color); color: white; }
@@ -165,13 +162,13 @@
 <body>
 
 <div class="wizard-card">
-    <h2 style="text-align: center; color: #0d6efd; margin-top: 0;">سامانه استعلام قیمت خدمات</h2>
+    <h2 style="text-align: center; color: #0d6efd; margin-top: 0;" id="formTitle">سامانه استعلام قیمت خدمات</h2>
 
     <!-- نوار پیشرفت -->
     <ul class="progressbar">
         <li class="active">بارگذاری فایل</li>
         <li>مشخصات فنی</li>
-        <li>زمان و موقعیت</li>
+        <li>زمان انجام کار</li>
         <li>تایید و ثبت</li>
     </ul>
 
@@ -199,11 +196,11 @@
             
             <div class="btn-group">
                 <div></div>
-                <button type="button" class="btn btn-next" onclick="nextStep(1)">گام بعدی ➔</button>
+                <button type="button" class="btn btn-next" onclick="nextStep(1)">ادامه</button>
             </div>
         </div>
 
-        <!-- گام ۲: مشخصات فنی -->
+        <!-- گام ۲: مشخصات فنی و شهر -->
         <div class="step">
             <div class="form-group">
                 <label for="quantity">تیراژ کل (تعداد قطعه):</label>
@@ -216,9 +213,19 @@
             </div>
 
             <div class="form-group">
+                <label for="city">شهر:</label>
+                <select id="city" required>
+                    <option value="tehran">تهران</option>
+                    <option value="alborz">البرز (کرج و حومه)</option>
+                    <option value="other">سایر شهرهای کشور</option>
+                </select>
+                <p style="font-size: 11px; color: #6c757d; margin-top: 4px;">* در حال حاضر خدمات اصلی مستقیماً در استان‌های تهران و البرز ارائه می‌شود.</p>
+            </div>
+
+            <div class="form-group">
                 <label for="processType">فرآیند ساخت یا دستگاه مد نظر (در صورت اطلاع):</label>
                 <select id="processType">
-                    <option value="unknown">نیازمند بررسی و تشخیص کارشناس شما</option>
+                    <option value="unknown">نیازمند بررسی و تشخیص کارشناس</option>
                     <option value="cnc_milling">فرزکاری CNC</option>
                     <option value="cnc_turning">تراشکاری CNC</option>
                     <option value="manual_turning">تراشکاری / فرزکاری دستی (منوآل)</option>
@@ -240,7 +247,7 @@
             </div>
 
             <div class="form-group">
-                <label>آیا نیاز به ساخت نمونه آزمایشی پیش از تولید اصلی دارید؟</label>
+                <label>نیاز به ساخت نمونه دارید؟</label>
                 <div class="radio-group">
                     <label class="radio-option"><input type="radio" name="sampleNeeded" value="no" checked> خیر</label>
                     <label class="radio-option"><input type="radio" name="sampleNeeded" value="yes"> بله</label>
@@ -248,26 +255,22 @@
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-prev" onclick="prevStep(2)">⬅ گام پیشین</button>
-                <button type="button" class="btn btn-next" onclick="nextStep(2)">گام بعدی ➔</button>
+                <button type="button" class="btn btn-prev" onclick="prevStep(2)">بازگشت</button>
+                <button type="button" class="btn btn-next" onclick="nextStep(2)">ادامه</button>
             </div>
         </div>
 
-        <!-- گام ۳: زمان‌بندی، شهر و سوابق -->
+        <!-- گام ۳: زمان‌بندی و سوابق -->
         <div class="step">
             <div class="form-group">
-                <label for="city">شهر محل سکونت / فعالیت:</label>
-                <select id="city" required>
-                    <option value="tehran">تهران</option>
-                    <option value="alborz">البرز (کرج و حومه)</option>
-                    <option value="other">سایر شهرهای کشور</option>
-                </select>
-                <p style="font-size: 11px; color: #6c757d; margin-top: 4px;">* در حال حاضر خدمات اصلی مستقیماً در استان‌های تهران و البرز ارائه می‌شود.</p>
-            </div>
-
-            <div class="form-group">
                 <label for="deadline">مهلت مورد انتظار برای انجام کار:</label>
-                <input type="text" id="deadline" placeholder="مثلاً: حداکثر تا ۱۰ روز آینده یا تاریخ دلخواه" required>
+                <select id="deadline" required>
+                    <option value="urgent">فوری (حداکثر ۱ تا ۲ روز کاری)</option>
+                    <option value="normal" selected>عادی (۳ تا ۵ روز کاری)</option>
+                    <option value="week">یک هفته کاری</option>
+                    <option value="twoweeks">دو هفته کاری یا بیشتر</option>
+                    <option value="flexible">توافقی / بسته به نظر کارشناس</option>
+                </select>
             </div>
 
             <div class="form-group">
@@ -276,8 +279,8 @@
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-prev" onclick="prevStep(3)">⬅ گام پیشین</button>
-                <button type="button" class="btn btn-next" onclick="nextStep(3)">گام بعدی ➔</button>
+                <button type="button" class="btn btn-prev" onclick="prevStep(3)">بازگشت</button>
+                <button type="button" class="btn btn-next" onclick="nextStep(3)">ادامه</button>
             </div>
         </div>
 
@@ -300,7 +303,7 @@
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-prev" onclick="prevStep(4)">⬅ گام پیشین</button>
+                <button type="button" class="btn btn-prev" onclick="prevStep(4)">بازگشت</button>
                 <button type="submit" class="btn btn-submit">ثبت نهایی درخواست</button>
             </div>
         </div>
@@ -312,6 +315,7 @@
     let currentStep = 0;
     const steps = document.querySelectorAll(".step");
     const progressLi = document.querySelectorAll(".progressbar li");
+    const formTitle = document.getElementById("formTitle");
 
     function showStep(stepIndex) {
         steps.forEach((step, index) => {
@@ -320,6 +324,13 @@
         progressLi.forEach((li, index) => {
             li.classList.toggle("active", index <= stepIndex);
         });
+
+        // نمایش عنوان سامانه فقط در مرحله نخستین
+        if (stepIndex === 0) {
+            formTitle.style.display = "block";
+        } else {
+            formTitle.style.display = "none";
+        }
     }
 
     function nextStep(fromStep) {
