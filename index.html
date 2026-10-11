@@ -8,11 +8,12 @@
     <style>
         :root {
             --primary-color: #0d6efd;
+            --primary-light: #e7f1ff;
             --success-color: #198754;
-            --bg-color: #f4f6f9;
+            --bg-color: #f0f4f8;
             --card-bg: #ffffff;
             --text-color: #212529;
-            --border-color: #ced4da;
+            --border-color: #dee2e6;
         }
 
         body {
@@ -21,67 +22,74 @@
             color: var(--text-color);
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
         }
 
         .wizard-card {
             max-width: 650px;
-            margin: 30px auto;
+            margin: 15px auto;
             background: var(--card-bg);
-            padding: 35px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            padding: 30px 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            border: 1px solid rgba(0,0,0,0.03);
         }
 
-        /* نوار پیشرفت */
-        .progressbar {
+        /* نوار پیشرفت مدرن و خطی */
+        .progress-container {
+            margin-bottom: 25px;
+        }
+
+        .progress-info {
             display: flex;
             justify-content: space-between;
-            list-style-type: none;
-            padding: 0;
-            margin-bottom: 30px;
-            counter-reset: step;
-        }
-
-        .progressbar li {
-            position: relative;
-            width: 25%;
-            text-align: center;
-            font-size: 12px;
-            color: #6c757d;
+            font-size: 13px;
             font-weight: bold;
+            color: #6c757d;
+            margin-bottom: 8px;
         }
 
-        .progressbar li::before {
-            content: counter(step);
-            counter-increment: step;
-            width: 30px;
-            height: 30px;
-            line-height: 30px;
-            border: 2px solid var(--border-color);
-            display: block;
-            text-align: center;
-            margin: 0 auto 10px auto;
-            border-radius: 50%;
-            background-color: white;
+        .progress-bar-track {
+            background-color: #e9ecef;
+            height: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
         }
 
-        .progressbar li.active {
-            color: var(--primary-color);
+        .progress-bar-fill {
+            background: linear-gradient(90deg, #0d6efd, #20c997);
+            height: 100%;
+            width: 25%;
+            border-radius: 10px;
+            transition: width 0.4s ease-in-out;
         }
 
-        .progressbar li.active::before {
-            border-color: var(--primary-color);
-            background-color: var(--primary-color);
-            color: white;
+        /* عناوین درشت هر مرحله */
+        .step-heading {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .step {
             display: none;
+            animation: fadeIn 0.4s ease-in-out;
         }
 
         .step.active {
             display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .form-group {
@@ -90,8 +98,10 @@
 
         label {
             display: block;
-            font-weight: bold;
+            font-weight: 700;
+            font-size: 14px;
             margin-bottom: 8px;
+            color: #334155;
         }
 
         input[type="text"],
@@ -99,12 +109,21 @@
         select,
         textarea {
             width: 100%;
-            padding: 11px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+            padding: 12px 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
             box-sizing: border-box;
             font-family: 'Vazirmatn', Tahoma, sans-serif;
             font-size: 14px;
+            transition: border-color 0.2s;
+            background-color: #fafbfc;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            background-color: #fff;
+            box-shadow: 0 0 0 4px var(--primary-light);
         }
 
         .radio-group {
@@ -116,45 +135,65 @@
         .radio-option {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
         }
 
         .file-upload-box {
             border: 2px dashed var(--primary-color);
-            padding: 25px;
+            padding: 30px 20px;
             text-align: center;
-            border-radius: 8px;
-            background-color: #f0f7ff;
+            border-radius: 12px;
+            background-color: var(--primary-light);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .file-upload-box:hover {
+            background-color: #d0e1fd;
         }
 
         .btn-group {
             display: flex;
             justify-content: space-between;
             margin-top: 30px;
+            gap: 15px;
         }
 
         .btn {
-            padding: 10px 24px;
-            border-radius: 6px;
+            padding: 12px 28px;
+            border-radius: 10px;
             border: none;
             font-size: 15px;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
             font-family: 'Vazirmatn', Tahoma, sans-serif;
+            transition: transform 0.1s, background-color 0.2s;
         }
 
-        .btn-next { background-color: var(--primary-color); color: white; }
-        .btn-prev { background-color: #6c757d; color: white; }
-        .btn-submit { background-color: var(--success-color); color: white; }
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-next { background-color: var(--primary-color); color: white; flex: 1; box-shadow: 0 4px 12px rgba(13, 110, 253, 0.25); }
+        .btn-next:hover { background-color: #0b5ed7; }
+
+        .btn-prev { background-color: #e2e8f0; color: #475569; }
+        .btn-prev:hover { background-color: #cbd5e1; }
+
+        .btn-submit { background-color: var(--success-color); color: white; flex: 1; box-shadow: 0 4px 12px rgba(25, 135, 84, 0.25); }
+        .btn-submit:hover { background-color: #157347; }
 
         .notice-box {
-            background-color: #e2f0d9;
-            border: 1px solid #c8e1b9;
-            color: #274e13;
-            padding: 12px;
-            border-radius: 6px;
+            background-color: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            color: #2e7d32;
+            padding: 14px;
+            border-radius: 10px;
             font-size: 13px;
+            font-weight: 600;
             margin-bottom: 20px;
         }
     </style>
@@ -162,20 +201,24 @@
 <body>
 
 <div class="wizard-card">
-    <h2 style="text-align: center; color: #0d6efd; margin-top: 0;" id="formTitle">سامانه استعلام قیمت خدمات</h2>
-
-    <!-- نوار پیشرفت -->
-    <ul class="progressbar">
-        <li class="active">بارگذاری فایل</li>
-        <li>مشخصات فنی</li>
-        <li>زمان انجام کار</li>
-        <li>تایید و ثبت</li>
-    </ul>
+    
+    <!-- نوار پیشرفت مدرن و خطی -->
+    <div class="progress-container">
+        <div class="progress-info">
+            <span id="progressText">مرحله ۱ از ۴: بارگذاری فایل</span>
+            <span id="progressPercent">۲۵٪</span>
+        </div>
+        <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="progressBarFill"></div>
+        </div>
+    </div>
 
     <form id="multiStepForm">
         
         <!-- گام ۱: بارگذاری فایل -->
-        <div class="step active">
+        <div class="step active" data-step="1">
+            <div class="step-heading">📁 بارگذاری فایل نقشه</div>
+            
             <div class="form-group">
                 <label>نوع سفارش خود را مشخص کنید:</label>
                 <div class="radio-group">
@@ -185,10 +228,11 @@
             </div>
 
             <div class="form-group">
-                <label>بارگذاری فایل (نقشه، مدل سه‌بعدی یا فایل ZIP مجموعه):</label>
-                <div class="file-upload-box">
-                    <input type="file" id="fileInput" required>
-                    <p style="font-size: 12px; color: #6c757d; margin-top: 8px;">
+                <label>بارگذاری فایل (نقشه، مدل سه‌بعدی یا فایل ZIP مجموعه): *</label>
+                <div class="file-upload-box" onclick="document.getElementById('fileInput').click()">
+                    <input type="file" id="fileInput" required style="display:none;" onchange="updateFileName(this)">
+                    <span id="fileNameDisplay" style="font-weight: 700; color: var(--primary-color);">برای انتخاب یا کشیدن فایل اینجا کلیک کنید</span>
+                    <p style="font-size: 12px; color: #64748b; margin-top: 8px;">
                         فرمت‌های مجاز: STEP, IGES, DXF, DWG, STL, PDF, ZIP, RAR (حداکثر ۱۰۰ مگابایت)
                     </p>
                 </div>
@@ -196,30 +240,45 @@
             
             <div class="btn-group">
                 <div></div>
-                <button type="button" class="btn btn-next" onclick="nextStep(1)">ادامه</button>
+                <button type="button" class="btn btn-next" onclick="nextStep(1)">ادامه مسیر ➔</button>
             </div>
         </div>
 
         <!-- گام ۲: مشخصات فنی و شهر -->
-        <div class="step">
+        <div class="step" data-step="2">
+            <div class="step-heading">⚙️ مشخصات فنی و جزئیات قطعه</div>
+
             <div class="form-group">
-                <label for="quantity">تیراژ کل (تعداد قطعه):</label>
+                <label for="quantity">تیراژ کل (تعداد قطعه): *</label>
                 <input type="number" id="quantity" min="1" value="1" required>
             </div>
 
             <div class="form-group">
-                <label for="material">جنس / متریال قطعه یا قطعات:</label>
-                <input type="text" id="material" placeholder="مثلاً: فولاد CK45، آلومینیوم 7075، تفلون یا طبق نقشه" required>
+                <label for="materialSelect">جنس / متریال قطعه: *</label>
+                <select id="materialSelect" onchange="checkCustomMaterial(this.value)" required>
+                    <option value="">انتخاب کنید...</option>
+                    <option value="فولاد (CK45 / St37 و غیره)">فولاد (CK45 / St37 و غیره)</option>
+                    <option value="استیل (مقاوم در برابر زنگ‌زدگی)">استیل</option>
+                    <option value="آلومینیوم (انواع آلیاژها)">آلومینیوم</option>
+                    <option value="تفلون / پلیمرهای صنعتی">تفلون / پلیمرهای صنعتی</option>
+                    <option value="برنج / مس">برنج / مس</option>
+                    <option value="custom">سایر موارد (نوشتن دستی)...</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="customMaterialGroup" style="display: none;">
+                <label for="customMaterial">نام متریال دلخواه را وارد کنید: *</label>
+                <input type="text" id="customMaterial" placeholder="مثلاً: چدن، تیتانیوم و...">
             </div>
 
             <div class="form-group">
-                <label for="city">شهر:</label>
+                <label for="city">شهر: *</label>
                 <select id="city" required>
                     <option value="tehran">تهران</option>
                     <option value="alborz">البرز (کرج و حومه)</option>
                     <option value="other">سایر شهرهای کشور</option>
                 </select>
-                <p style="font-size: 11px; color: #6c757d; margin-top: 4px;">* در حال حاضر خدمات اصلی مستقیماً در استان‌های تهران و البرز ارائه می‌شود.</p>
+                <p style="font-size: 11px; color: #64748b; margin-top: 4px;">* خدمات اصلی مستقیماً در استان‌های تهران و البرز ارائه می‌شود.</p>
             </div>
 
             <div class="form-group">
@@ -228,6 +287,7 @@
                     <option value="unknown">نیازمند بررسی و تشخیص کارشناس</option>
                     <option value="cnc_milling">فرزکاری CNC</option>
                     <option value="cnc_turning">تراشکاری CNC</option>
+                    <option value="heavy_turning">سنگین‌تراش</option>
                     <option value="manual_turning">تراشکاری / فرزکاری دستی (منوآل)</option>
                     <option value="laser_cut">برش لیزر</option>
                     <option value="wirecut">وایرکات (Wire EDM)</option>
@@ -255,15 +315,17 @@
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-prev" onclick="prevStep(2)">بازگشت</button>
-                <button type="button" class="btn btn-next" onclick="nextStep(2)">ادامه</button>
+                <button type="button" class="btn btn-prev" onclick="prevStep(2)">⬅ بازگشت</button>
+                <button type="button" class="btn btn-next" onclick="nextStep(2)">ادامه مسیر ➔</button>
             </div>
         </div>
 
         <!-- گام ۳: زمان‌بندی و سوابق -->
-        <div class="step">
+        <div class="step" data-step="3">
+            <div class="step-heading">⏱️ زمان‌بندی و سابقه سفارش</div>
+
             <div class="form-group">
-                <label for="deadline">مهلت مورد انتظار برای انجام کار:</label>
+                <label for="deadline">مهلت مورد انتظار برای انجام کار: *</label>
                 <select id="deadline" required>
                     <option value="urgent">فوری (حداکثر ۱ تا ۲ روز کاری)</option>
                     <option value="normal" selected>عادی (۳ تا ۵ روز کاری)</option>
@@ -279,32 +341,34 @@
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-prev" onclick="prevStep(3)">بازگشت</button>
-                <button type="button" class="btn btn-next" onclick="nextStep(3)">ادامه</button>
+                <button type="button" class="btn btn-prev" onclick="prevStep(3)">⬅ بازگشت</button>
+                <button type="button" class="btn btn-next" onclick="nextStep(3)">ادامه مسیر ➔</button>
             </div>
         </div>
 
         <!-- گام ۴: تایید شماره موبایل با SMS -->
-        <div class="step">
+        <div class="step" data-step="4">
+            <div class="step-heading">📱 احراز هویت و ثبت نهایی</div>
+
             <div class="notice-box">
-                ℹ️ لطفاً شماره همراه خود را وارد کنید تا کد تأیید برای شما ارسال شود.
+                ℹ️ برای ارسال پیش‌فاکتور دقیق و جلوگیری از اسپم، لطفاً شماره همراه خود را تأیید کنید.
             </div>
 
             <div class="form-group">
-                <label for="phone">شماره همراه:</label>
+                <label for="phone">شماره همراه: *</label>
                 <input type="text" id="phone" placeholder="۰۹۱۲۳۴۵۶۷۸۹" required>
             </div>
 
-            <button type="button" class="btn btn-next" style="width: 100%; margin-bottom: 15px;" onclick="sendOTP()">ارسال کد تأیید پیامکی</button>
+            <button type="button" class="btn btn-next" style="width: 100%; margin-bottom: 15px; background-color: #6366f1;" onclick="sendOTP()">ارسال کد تأیید پیامکی</button>
 
             <div class="form-group" id="otpSection" style="display: none;">
-                <label for="otpCode">کد ۴ رقمی ارسال شده را وارد کنید:</label>
+                <label for="otpCode">کد ۴ رقمی ارسال شده را وارد کنید: *</label>
                 <input type="text" id="otpCode" placeholder="----" maxlength="4">
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-prev" onclick="prevStep(4)">بازگشت</button>
-                <button type="submit" class="btn btn-submit">ثبت نهایی درخواست</button>
+                <button type="button" class="btn btn-prev" onclick="prevStep(4)">⬅ بازگشت</button>
+                <button type="submit" class="btn btn-submit">ثبت نهایی درخواست 🎉</button>
             </div>
         </div>
 
@@ -314,33 +378,76 @@
 <script>
     let currentStep = 0;
     const steps = document.querySelectorAll(".step");
-    const progressLi = document.querySelectorAll(".progressbar li");
-    const formTitle = document.getElementById("formTitle");
+    const progressText = document.getElementById("progressText");
+    const progressPercent = document.getElementById("progressPercent");
+    const progressBarFill = document.getElementById("progressBarFill");
+
+    const stepInfo = [
+        { text: "مرحله ۱ از ۴: بارگذاری فایل", percent: "۲۵٪", width: "25%" },
+        { text: "مرحله ۲ از ۴: مشخصات فنی", percent: "۵۰٪", width: "50%" },
+        { text: "مرحله ۳ از ۴: زمان انجام کار", percent: "۷۵٪", width: "75%" },
+        { text: "مرحله ۴ از ۴: تایید نهایی", percent: "۱۰۰٪", width: "100%" }
+    ];
 
     function showStep(stepIndex) {
         steps.forEach((step, index) => {
             step.classList.toggle("active", index === stepIndex);
         });
-        progressLi.forEach((li, index) => {
-            li.classList.toggle("active", index <= stepIndex);
-        });
 
-        // نمایش عنوان سامانه فقط در مرحله نخستین
-        if (stepIndex === 0) {
-            formTitle.style.display = "block";
-        } else {
-            formTitle.style.display = "none";
+        // آپدیت کردن نوار پیشرفت پویا
+        progressText.innerText = stepInfo[stepIndex].text;
+        progressPercent.innerText = stepInfo[stepIndex].percent;
+        progressBarFill.style.width = stepInfo[stepIndex].width;
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateFileName(input) {
+        const display = document.getElementById("fileNameDisplay");
+        if (input.files && input.files[0]) {
+            display.innerText = "📁 فایل انتخاب شد: " + input.files[0].name;
+            display.style.color = "#198754";
         }
+    }
+
+    function checkCustomMaterial(val) {
+        const customGroup = document.getElementById("customMaterialGroup");
+        if (val === "custom") {
+            customGroup.style.display = "block";
+            document.getElementById("customMaterial").setAttribute("required", "true");
+        } else {
+            customGroup.style.display = "none";
+            document.getElementById("customMaterial").removeAttribute("required");
+        }
+    }
+
+    function validateStep(stepIndex) {
+        const currentStepElement = steps[stepIndex];
+        const requiredInputs = currentStepElement.querySelectorAll("[required]");
+        
+        for (let input of requiredInputs) {
+            if (!input.value || input.value.trim() === "") {
+                input.focus();
+                alert("لطفاً فیلدهای اجباری مشخص‌شده را کامل کنید تا به مرحله بعد برویم.");
+                return false;
+            }
+        }
+        return true;
     }
 
     function nextStep(fromStep) {
         if (fromStep === 1) {
             const fileInput = document.getElementById("fileInput");
             if (!fileInput.files.length) {
-                alert("لطفاً ابتدا فایل سفارش خود را انتخاب کنید.");
+                alert("لطفاً ابتدا فایل نقشه خود را انتخاب کنید.");
                 return;
             }
         }
+        
+        if (!validateStep(currentStep)) {
+            return;
+        }
+
         currentStep++;
         showStep(currentStep);
     }
@@ -362,7 +469,15 @@
 
     document.getElementById("multiStepForm").addEventListener("submit", function(e) {
         e.preventDefault();
-        alert("درخواست شما با موفقیت ثبت شد! نتیجه برآورد هزینه و زمان، طی ۱ تا ۲ روز کاری آینده از طریق پیامک یا تماس به اطلاع شما خواهد رسید.");
+        const phone = document.getElementById("phone").value;
+        const otpCode = document.getElementById("otpCode").value;
+
+        if (!phone || !otpCode) {
+            alert("لطفاً شماره همراه و کد تأیید را کامل وارد کنید.");
+            return;
+        }
+
+        alert("تبریک! درخواست شما با موفقیت ثبت شد. نتیجه برآورد هزینه و زمان، طی ۱ تا ۲ روز کاری آینده از طریق پیامک یا تماس به اطلاع شما خواهد رسید.");
     });
 </script>
 
