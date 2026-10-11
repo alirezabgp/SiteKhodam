@@ -69,7 +69,6 @@
             transition: color 0.3s ease;
         }
 
-        /* آیکون‌های سه‌بعدی SVG */
         .custom-icon {
             width: 26px;
             height: 26px;
@@ -223,22 +222,69 @@
             margin-bottom: 20px;
         }
 
-        .top-nav {
+        /* استایل منوی سه‌خطی (همبرگری) */
+        .header-nav {
             display: flex;
             justify-content: flex-end;
             margin-bottom: 15px;
+            position: relative;
         }
 
-        .track-link {
-            font-size: 13px;
-            color: var(--primary-color);
-            background-color: var(--primary-light);
-            padding: 6px 14px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 700;
+        .hamburger-btn {
+            background: none;
+            border: 2px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fafbfc;
+            transition: border-color 0.2s;
+        }
+
+        .hamburger-btn:hover {
+            border-color: var(--primary-color);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 45px;
+            left: 0;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            width: 180px;
+            display: none;
+            z-index: 100;
+            overflow: hidden;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-color);
             cursor: pointer;
             border: none;
+            background: none;
+            width: 100%;
+            text-align: right;
+            display: block;
+            transition: background-color 0.2s;
+            text-decoration: none;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
         }
 
         .notice-box {
@@ -327,10 +373,17 @@
 
 <div class="wizard-card">
     
-    <div class="top-nav">
-        <button type="button" class="track-link" onclick="openTrackingModal()">🔍 پیگیری سفارش‌های قبلی</button>
+    <!-- منوی سه‌خطی در سمت راست بالا -->
+    <div class="header-nav">
+        <button type="button" class="hamburger-btn" onclick="toggleDropdown(event)">
+            ☰
+        </button>
+        <div id="dropdownMenu" class="dropdown-menu">
+            <button type="button" class="dropdown-item" onclick="openTrackingModal()">پیگیری سفارش</button>
+        </div>
     </div>
 
+    <!-- نوار پیشرفت دیداری -->
     <div class="progress-container" id="progressContainer">
         <div class="progress-bar-track">
             <div class="progress-bar-fill" id="progressBarFill"></div>
@@ -341,10 +394,10 @@
         
         <!-- گام ۱: صفحه نخست -->
         <div class="step active" data-step="0">
-            <div class="step-heading" style="text-align: center; color: var(--primary-color); justify-content: center;">
+            <div class="step-heading" id="heading-0" style="text-align: center; color: var(--primary-color); justify-content: center; display: block;">
                 سامانه استعلام و برآورد هزینه خدمات
             </div>
-            <p style="text-align: center; color: #64748b; font-size: 14px; margin-top: -10px; margin-bottom: 25px;">
+            <p style="text-align: center; color: #64748b; font-size: 14px; margin-top: -5px; margin-bottom: 25px;">
                 تضمین کمترین قیمت و زمان تحویل خدمات
             </p>
 
@@ -361,7 +414,7 @@
             </div>
 
             <div class="btn-group">
-                <button type="button" class="btn btn-next" style="font-size: 16px;" onclick="nextStep()">شروع استعلام و ادامه</button>
+                <button type="button" class="btn btn-next" style="font-size: 16px;" onclick="nextStep()">ثبت سفارش</button>
             </div>
         </div>
 
@@ -424,10 +477,9 @@
             </div>
         </div>
 
-        <!-- گام ۵: جنس متریال (با آیکون سه‌بعدی ایزو از شمش‌های گرد و چهارپهلو) -->
+        <!-- گام ۵: جنس متریال -->
         <div class="step" data-step="4">
             <div class="step-heading" id="heading-4">
-                <!-- آیکون سه‌بعدی ایزو شمش‌های خام/میلگرد -->
                 <svg class="custom-icon" viewBox="0 0 24 24">
                     <path d="M12 3L2 8l10 5 10-5-10-5zM2 14l10 5 10-5M2 10l10 5 10-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -514,93 +566,4 @@
                     <input type="radio" name="sampleNeeded" value="no" required> خیر
                 </label>
                 <label class="option-card">
-                    <input type="radio" name="sampleNeeded" value="yes" required> بله
-                </label>
-            </div>
-
-            <div class="step-heading" style="font-size: 18px; margin-top: 20px;" id="heading-7-sub">
-                <svg class="custom-icon" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-                مهلت مورد انتظار برای انجام کار: *
-            </div>
-            <div class="form-group">
-                <select id="deadline" required>
-                    <option value="">انتخاب کنید...</option>
-                    <option value="urgent">فوری (حداکثر ۱ تا ۲ روز کاری)</option>
-                    <option value="normal">عادی (۳ تا ۵ روز کاری)</option>
-                    <option value="week">یک هفته کاری</option>
-                    <option value="twoweeks">دو هفته کاری یا بیشتر</option>
-                    <option value="flexible">توافقی / بسته به نظر کارشناس</option>
-                </select>
-            </div>
-
-            <div class="btn-group">
-                <button type="button" class="btn btn-prev" onclick="prevStep()">بازگشت</button>
-                <button type="button" class="btn btn-next" onclick="nextStep()">ادامه</button>
-            </div>
-        </div>
-
-        <!-- گام ۹: تایید موبایل و ثبت -->
-        <div class="step" data-step="8">
-            <div class="step-heading" id="heading-8">
-                <svg class="custom-icon" viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
-                احراز هویت و ثبت نهایی
-            </div>
-
-            <div class="notice-box">
-                ℹ️ برای ارسال پیش‌فاکتور دقیق و جلوگیری از اسپم، لطفاً شماره همراه خود را تأیید کنید.
-            </div>
-
-            <div class="form-group">
-                <label for="phone">شماره همراه: *</label>
-                <input type="text" id="phone" placeholder="۰۹۱۲۳۴۵۶۷۸۹" required>
-            </div>
-
-            <button type="button" class="btn btn-next" style="width: 100%; margin-bottom: 15px; background-color: #6366f1;" onclick="sendOTP()">ارسال کد تأیید پیامکی</button>
-
-            <div class="form-group" id="otpSection" style="display: none;">
-                <label for="otpCode">کد ۴ رقمی ارسال شده را وارد کنید: *</label>
-                <input type="text" id="otpCode" placeholder="----" maxlength="4">
-            </div>
-
-            <div class="btn-group">
-                <button type="button" class="btn btn-prev" onclick="prevStep()">بازگشت</button>
-                <button type="submit" class="btn btn-submit">ثبت نهایی درخواست</button>
-            </div>
-        </div>
-
-    </form>
-
-    <!-- بخش پیگیری سفارش -->
-    <div id="trackingView" style="display: none;">
-        <div class="step-heading">🔍 پیگیری وضعیت سفارش</div>
-        <div class="form-group">
-            <label for="trackPhone">شماره همراه ثبت‌شده خود را وارد کنید:</label>
-            <input type="text" id="trackPhone" placeholder="۰۹۱۲۳۴۵۶۷۸۹">
-        </div>
-        <button type="button" class="btn btn-next" style="width: 100%; margin-bottom: 20px;" onclick="showTrackingResult()">مشاهده وضعیت سفارش</button>
-
-        <div id="trackingResultBox" style="display: none;">
-            <p style="font-weight: bold; font-size: 13px; color: #475569; margin-bottom: 15px;">آخرین وضعیت سفارش شما:</p>
-            <ul class="tracking-timeline">
-                <li class="timeline-item completed">
-                    <div class="timeline-bullet">✓</div>
-                    <div class="timeline-content">
-                        <h4>ثبت درخواست و بارگذاری نقشه</h4>
-                        <p>درخواست شما با موفقیت دریافت شد.</p>
-                    </div>
-                </li>
-                <li class="timeline-item active">
-                    <div class="timeline-bullet">2</div>
-                    <div class="timeline-content">
-                        <h4>بررسی فنی و محاسبه قیمت</h4>
-                        <p>نقشه در حال بررسی توسط مهندس محاسب است.</p>
-                    </div>
-                </li>
-                <li class="timeline-item">
-                    <div class="timeline-bullet">3</div>
-                    <div class="timeline-content">
-                        <h4>صدور پیش‌فاکتور و تأیید</h4>
-                        <p>آماده‌سازی فاکتور و هماهنگی با شما.</p>
-                    </div>
-                </li>
-                <li class="timeline-item">
+                    <input type
