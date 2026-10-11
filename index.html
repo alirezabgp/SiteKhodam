@@ -154,6 +154,7 @@
             font-size: 15px;
             transition: all 0.2s ease;
             background-color: #fafbfc;
+            margin-bottom: 0;
         }
 
         .option-card:hover {
@@ -278,6 +279,7 @@
             padding: 12px 16px;
             font-size: 14px;
             font-weight: 600;
+            font-family: 'Vazirmatn', Tahoma, sans-serif;
             color: var(--text-color);
             cursor: pointer;
             border: none;
@@ -349,6 +351,7 @@
             justify-content: center;
             font-size: 12px;
             font-weight: bold;
+            flex-shrink: 0;
         }
 
         .timeline-item.completed .timeline-bullet {
@@ -378,7 +381,7 @@
 <div id="bottomToast">لطفاً به سوالات پاسخ دهید.</div>
 
 <div class="wizard-card">
-    
+
     <!-- منوی سه‌خطی -->
     <div class="header-nav">
         <button type="button" class="hamburger-btn" id="menuBtn">☰</button>
@@ -395,7 +398,7 @@
     </div>
 
     <form id="multiStepForm">
-        
+
         <!-- گام ۱: صفحه نخست -->
         <div class="step active" data-step="0">
             <div class="step-heading" id="heading-0" style="text-align: center; color: var(--primary-color); justify-content: center; display: block;">
@@ -447,7 +450,7 @@
                 بارگذاری فایل نقشه یا تصویر: *
             </div>
             <div class="file-upload-box" onclick="document.getElementById('fileInput').click()">
-                <input type="file" id="fileInput" accept=".step,.stp,.iges,.igs,.dxf,.dwg,.stl,.pdf,.zip,.rar,.jpg,.jpeg,.png,.webp" style="display:none;" onchange="updateFileName(this)">
+                <input type="file" id="fileInput" accept=".step,.stp,.iges,.igs,.dxf,.dwg,.stl,.pdf,.zip,.rar,.jpg,.jpeg,.png,.webp" style="display:none;" onclick="event.stopPropagation()" onchange="updateFileName(this)">
                 <span id="fileNameDisplay" style="font-weight: 700; color: var(--primary-color);">برای انتخاب فایل یا تصویر نقشه کلیک کنید</span>
                 <p style="font-size: 12px; color: #64748b; margin-top: 10px; line-height: 1.7;">
                     فایل‌های مهندسی یا <strong>تصویر نقشه دستی/کاغذی (JPG, PNG)</strong>
@@ -577,12 +580,12 @@
             <div class="notice-box">ℹ️ لطفاً شماره همراه خود را برای دریافت پیش‌فاکتور تأیید کنید.</div>
             <div class="form-group">
                 <label for="phone">شماره همراه: *</label>
-                <input type="text" id="phone" placeholder="۰۹۱۲۳۴۵۶۷۸۹">
+                <input type="text" id="phone" placeholder="۰۹۱۲۳۴۵۶۷۸۹" inputmode="numeric" maxlength="11">
             </div>
             <button type="button" class="btn btn-next" style="width: 100%; margin-bottom: 15px; background-color: #6366f1;" onclick="sendOTP()">ارسال کد تأیید پیامکی</button>
             <div class="form-group" id="otpSection" style="display: none;">
                 <label for="otpCode">کد ۴ رقمی ارسال شده: *</label>
-                <input type="text" id="otpCode" placeholder="----" maxlength="4">
+                <input type="text" id="otpCode" placeholder="----" maxlength="4" inputmode="numeric">
             </div>
             <div class="btn-group">
                 <button type="button" class="btn btn-prev" onclick="prevStep()">بازگشت</button>
@@ -597,7 +600,7 @@
         <div class="step-heading">🔍 پیگیری وضعیت سفارش</div>
         <div class="form-group">
             <label for="trackPhone">شماره همراه ثبت‌شده:</label>
-            <input type="text" id="trackPhone" placeholder="۰۹۱۲۳۴۵۶۷۸۹">
+            <input type="text" id="trackPhone" placeholder="۰۹۱۲۳۴۵۶۷۸۹" inputmode="numeric" maxlength="11">
         </div>
         <button type="button" class="btn btn-next" style="width: 100%; margin-bottom: 20px;" onclick="showTrackingResult()">مشاهده وضعیت</button>
 
@@ -633,38 +636,37 @@
         } else {
             progressContainer.style.display = "block";
             const percent = Math.round(((currentStep + 1) / totalSteps) * 100);
-            progressBarFill.style.width = `${percent}%`;
+            progressBarFill.style.width = percent + "%";
         }
     }
 
     function showStep(stepIndex) {
-        steps.forEach((step, index) => {
+        steps.forEach(function (step, index) {
             step.classList.toggle("active", index === stepIndex);
         });
         currentStep = stepIndex;
         updateProgress();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     // کنترل منوی همبرگری
     const menuBtn = document.getElementById("menuBtn");
     const dropdownMenu = document.getElementById("dropdownMenu");
 
-    menuBtn.onclick = function(e) {
+    menuBtn.addEventListener("click", function (e) {
         e.stopPropagation();
         dropdownMenu.classList.toggle("show");
-    };
+    });
 
-    window.onclick = function() {
-        if (dropdownMenu.classList.contains("show")) {
-            dropdownMenu.classList.remove("show");
-        }
-    };
+    document.addEventListener("click", function () {
+        dropdownMenu.classList.remove("show");
+    });
 
-    function showBottomToast() {
+    function showBottomToast(message) {
         const toast = document.getElementById("bottomToast");
+        toast.textContent = message || "لطفاً به سوالات پاسخ دهید.";
         toast.classList.add("show");
-        setTimeout(() => {
+        setTimeout(function () {
             toast.classList.remove("show");
         }, 3000);
     }
@@ -673,10 +675,21 @@
         const heading = document.getElementById(elementId);
         if (heading) {
             heading.classList.add("shake-animation");
-            setTimeout(() => {
+            setTimeout(function () {
                 heading.classList.remove("shake-animation");
             }, 400);
         }
+    }
+
+    // تبدیل ارقام فارسی و عربی به انگلیسی
+    function toEnglishDigits(str) {
+        return String(str || "")
+            .replace(/[۰-۹]/g, function (d) { return "۰۱۲۳۴۵۶۷۸۹".indexOf(d); })
+            .replace(/[٠-٩]/g, function (d) { return "٠١٢٣٤٥٦٧٨٩".indexOf(d); });
+    }
+
+    function isValidPhone(value) {
+        return /^09\d{9}$/.test(toEnglishDigits(value).trim());
     }
 
     function updateFileName(input) {
@@ -689,11 +702,13 @@
 
     function checkCustomMaterial(val) {
         const customGroup = document.getElementById("customMaterialGroup");
-        if (val === "custom") {
-            customGroup.style.display = "block";
-        } else {
-            customGroup.style.display = "none";
-        }
+        customGroup.style.display = (val === "custom") ? "block" : "none";
+    }
+
+    function fail(headingId, message) {
+        showBottomToast(message);
+        triggerShake(headingId);
+        return false;
     }
 
     function validateCurrentStep() {
@@ -701,21 +716,54 @@
 
         const currentElem = steps[currentStep];
 
+        // گام ۲: نوع سفارش
         if (currentStep === 1) {
-            const checked = currentElem.querySelector("input[name='orderType']:checked");
-            if (!checked) {
-                showBottomToast();
-                triggerShake("heading-1");
-                return false;
+            if (!currentElem.querySelector("input[name='orderType']:checked")) {
+                return fail("heading-1");
             }
         }
 
+        // گام ۳: فایل
         if (currentStep === 2) {
             const fileInput = document.getElementById("fileInput");
             if (!fileInput.files.length) {
-                showBottomToast();
-                triggerShake("heading-2");
-                return false;
+                return fail("heading-2");
+            }
+        }
+
+        // گام ۴: تیراژ
+        if (currentStep === 3) {
+            const qty = parseInt(toEnglishDigits(document.getElementById("quantity").value), 10);
+            if (!qty || qty < 1) {
+                return fail("heading-3");
+            }
+        }
+
+        // گام ۵: متریال
+        if (currentStep === 4) {
+            const material = document.getElementById("materialSelect").value;
+            if (!material) {
+                return fail("heading-4");
+            }
+            if (material === "custom" && !document.getElementById("customMaterial").value.trim()) {
+                return fail("heading-4");
+            }
+        }
+
+        // گام ۷: تامین متریال
+        if (currentStep === 6) {
+            if (!currentElem.querySelector("input[name='materialSupply']:checked")) {
+                return fail("heading-6");
+            }
+        }
+
+        // گام ۸: نمونه و مهلت
+        if (currentStep === 7) {
+            if (!currentElem.querySelector("input[name='sampleNeeded']:checked")) {
+                return fail("heading-7");
+            }
+            if (!document.getElementById("deadline").value) {
+                return fail("heading-7-sub");
             }
         }
 
@@ -744,11 +792,49 @@
 
     function closeTrackingView() {
         trackingView.style.display = "none";
+        document.getElementById("trackingResultBox").style.display = "none";
         multiStepForm.style.display = "block";
         updateProgress();
     }
 
     function showTrackingResult() {
         const phone = document.getElementById("trackPhone").value;
-        if (!phone || phone.length < 11) {
-            
+        if (!isValidPhone(phone)) {
+            showBottomToast("لطفاً شماره همراه معتبر وارد کنید.");
+            return;
+        }
+        document.getElementById("trackingResultBox").style.display = "block";
+    }
+
+    function sendOTP() {
+        const phone = document.getElementById("phone").value;
+        if (!isValidPhone(phone)) {
+            fail("heading-8", "لطفاً شماره همراه معتبر وارد کنید.");
+            return;
+        }
+        // TODO: اتصال به سرویس پیامک
+        document.getElementById("otpSection").style.display = "block";
+    }
+
+    multiStepForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const phone = document.getElementById("phone").value;
+        const otp = toEnglishDigits(document.getElementById("otpCode").value).trim();
+
+        if (!isValidPhone(phone)) {
+            fail("heading-8", "لطفاً شماره همراه معتبر وارد کنید.");
+            return;
+        }
+        if (!/^\d{4}$/.test(otp)) {
+            fail("heading-8", "کد تأیید ۴ رقمی را وارد کنید.");
+            return;
+        }
+
+        // TODO: ارسال اطلاعات فرم به سرور
+        alert("درخواست شما با موفقیت ثبت شد.");
+    });
+</script>
+
+</body>
+</html>
