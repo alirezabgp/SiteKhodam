@@ -375,7 +375,7 @@
     
     <!-- منوی سه‌خطی در سمت راست بالا -->
     <div class="header-nav">
-        <button type="button" class="hamburger-btn" onclick="toggleDropdown(event)">
+        <button type="button" class="hamburger-btn" id="menuBtn">
             ☰
         </button>
         <div id="dropdownMenu" class="dropdown-menu">
@@ -566,4 +566,190 @@
                     <input type="radio" name="sampleNeeded" value="no" required> خیر
                 </label>
                 <label class="option-card">
-                    <input type
+                    <input type="radio" name="sampleNeeded" value="yes" required> بله
+                </label>
+            </div>
+
+            <div class="step-heading" style="font-size: 18px; margin-top: 20px;" id="heading-7-sub">
+                <svg class="custom-icon" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                مهلت مورد انتظار برای انجام کار: *
+            </div>
+            <div class="form-group">
+                <select id="deadline" required>
+                    <option value="">انتخاب کنید...</option>
+                    <option value="urgent">فوری (حداکثر ۱ تا ۲ روز کاری)</option>
+                    <option value="normal">عادی (۳ تا ۵ روز کاری)</option>
+                    <option value="week">یک هفته کاری</option>
+                    <option value="twoweeks">دو هفته کاری یا بیشتر</option>
+                    <option value="flexible">توافقی / بسته به نظر کارشناس</option>
+                </select>
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-prev" onclick="prevStep()">بازگشت</button>
+                <button type="button" class="btn btn-next" onclick="nextStep()">ادامه</button>
+            </div>
+        </div>
+
+        <!-- گام ۹: تایید موبایل و ثبت -->
+        <div class="step" data-step="8">
+            <div class="step-heading" id="heading-8">
+                <svg class="custom-icon" viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
+                احراز هویت و ثبت نهایی
+            </div>
+
+            <div class="notice-box">
+                ℹ️ برای ارسال پیش‌فاکتور دقیق و جلوگیری از اسپم، لطفاً شماره همراه خود را تأیید کنید.
+            </div>
+
+            <div class="form-group">
+                <label for="phone">شماره همراه: *</label>
+                <input type="text" id="phone" placeholder="۰۹۱۲۳۴۵۶۷۸۹" required>
+            </div>
+
+            <button type="button" class="btn btn-next" style="width: 100%; margin-bottom: 15px; background-color: #6366f1;" onclick="sendOTP()">ارسال کد تأیید پیامکی</button>
+
+            <div class="form-group" id="otpSection" style="display: none;">
+                <label for="otpCode">کد ۴ رقمی ارسال شده را وارد کنید: *</label>
+                <input type="text" id="otpCode" placeholder="----" maxlength="4">
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-prev" onclick="prevStep()">بازگشت</button>
+                <button type="submit" class="btn btn-submit">ثبت نهایی درخواست</button>
+            </div>
+        </div>
+
+    </form>
+
+    <!-- بخش پیگیری سفارش -->
+    <div id="trackingView" style="display: none;">
+        <div class="step-heading">🔍 پیگیری وضعیت سفارش</div>
+        <div class="form-group">
+            <label for="trackPhone">شماره همراه ثبت‌شده خود را وارد کنید:</label>
+            <input type="text" id="trackPhone" placeholder="۰۹۱۲۳۴۵۶۷۸۹">
+        </div>
+        <button type="button" class="btn btn-next" style="width: 100%; margin-bottom: 20px;" onclick="showTrackingResult()">مشاهده وضعیت سفارش</button>
+
+        <div id="trackingResultBox" style="display: none;">
+            <p style="font-weight: bold; font-size: 13px; color: #475569; margin-bottom: 15px;">آخرین وضعیت سفارش شما:</p>
+            <ul class="tracking-timeline">
+                <li class="timeline-item completed">
+                    <div class="timeline-bullet">✓</div>
+                    <div class="timeline-content">
+                        <h4>ثبت درخواست و بارگذاری نقشه</h4>
+                        <p>درخواست شما با موفقیت دریافت شد.</p>
+                    </div>
+                </li>
+                <li class="timeline-item active">
+                    <div class="timeline-bullet">2</div>
+                    <div class="timeline-content">
+                        <h4>بررسی فنی و محاسبه قیمت</h4>
+                        <p>نقشه در حال بررسی توسط مهندس محاسب است.</p>
+                    </div>
+                </li>
+                <li class="timeline-item">
+                    <div class="timeline-bullet">3</div>
+                    <div class="timeline-content">
+                        <h4>صدور پیش‌فاکتور و تأیید</h4>
+                        <p>آماده‌سازی فاکتور و هماهنگی با شما.</p>
+                    </div>
+                </li>
+                <li class="timeline-item">
+                    <div class="timeline-bullet">4</div>
+                    <div class="timeline-content">
+                        <h4>در حال ساخت / ماشین‌کاری</h4>
+                        <p>قطعه روی دستگاه قرار دارد.</p>
+                    </div>
+                </li>
+                <li class="timeline-item">
+                    <div class="timeline-bullet">5</div>
+                    <div class="timeline-content">
+                        <h4>آماده تحویل</h4>
+                        <p>کنترل کیفیت نهایی و ارسال.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <button type="button" class="btn btn-prev" style="width: 100%; margin-top: 20px;" onclick="closeTrackingView()">بازگشت به سامانه استعلام</button>
+    </div>
+
+</div>
+
+<script>
+    let currentStep = 0;
+    const totalSteps = 9;
+    const steps = document.querySelectorAll(".step");
+    const progressBarFill = document.getElementById("progressBarFill");
+    const progressContainer = document.getElementById("progressContainer");
+    const multiStepForm = document.getElementById("multiStepForm");
+    const trackingView = document.getElementById("trackingView");
+
+    function updateProgress() {
+        const percent = Math.round(((currentStep + 1) / totalSteps) * 100);
+        progressBarFill.style.width = `${percent}%`;
+    }
+
+    function showStep(stepIndex) {
+        steps.forEach((step, index) => {
+            step.classList.toggle("active", index === stepIndex);
+        });
+        updateProgress();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // کنترل منوی سه‌خطی (همبرگری)
+    const menuBtn = document.getElementById("menuBtn");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+
+    menuBtn.addEventListener("click", function(event) {
+        event.stopPropagation();
+        dropdownMenu.classList.toggle("show");
+    });
+
+    window.addEventListener("click", function() {
+        if (dropdownMenu.classList.contains("show")) {
+            dropdownMenu.classList.remove("show");
+        }
+    });
+
+    function showBottomToast() {
+        const toast = document.getElementById("bottomToast");
+        toast.classList.add("show");
+        setTimeout(() => {
+            toast.classList.remove("show");
+        }, 3000);
+    }
+
+    function triggerShake(elementId) {
+        const heading = document.getElementById(elementId);
+        if (heading) {
+            heading.classList.add("shake-animation");
+            setTimeout(() => {
+                heading.classList.remove("shake-animation");
+            }, 400);
+        }
+    }
+
+    function updateFileName(input) {
+        const display = document.getElementById("fileNameDisplay");
+        if (input.files && input.files[0]) {
+            display.innerText = "📁 فایل انتخاب شد: " + input.files[0].name;
+            display.style.color = "#198754";
+        }
+    }
+
+    function checkCustomMaterial(val) {
+        const customGroup = document.getElementById("customMaterialGroup");
+        if (val === "custom") {
+            customGroup.style.display = "block";
+            document.getElementById("customMaterial").setAttribute("required", "true");
+        } else {
+            customGroup.style.display = "none";
+            document.getElementById("customMaterial").removeAttribute("required");
+        }
+    }
+
+    function validateCurrentStep() {
+        if (currentStep === 0
