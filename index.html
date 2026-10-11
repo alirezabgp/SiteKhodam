@@ -36,7 +36,7 @@
             position: relative;
         }
 
-        /* نوار پیشرفت دیداری و ساده بدون اعداد */
+        /* نوار پیشرفت دیداری */
         .progress-container {
             margin-bottom: 25px;
         }
@@ -51,7 +51,7 @@
         .progress-bar-fill {
             background: linear-gradient(90deg, #0d6efd, #20c997);
             height: 100%;
-            width: 12.5%;
+            width: 11.1%;
             border-radius: 10px;
             transition: width 0.4s ease-in-out;
         }
@@ -62,6 +62,9 @@
             color: #1e293b;
             margin-bottom: 20px;
             line-height: 1.4;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .step {
@@ -197,7 +200,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .notice-box {
@@ -216,7 +219,7 @@
 
 <div class="wizard-card">
     
-    <!-- نوار پیشرفت فقط دیداری -->
+    <!-- نوار پیشرفت دیداری -->
     <div class="progress-container">
         <div class="progress-bar-track">
             <div class="progress-bar-fill" id="progressBarFill"></div>
@@ -225,9 +228,11 @@
 
     <form id="multiStepForm">
         
-        <!-- گام ۱: صفحه نخست و شروع سفارش -->
+        <!-- گام ۱: صفحه نخست -->
         <div class="step active" data-step="0">
-            <div class="step-heading" style="text-align: center; color: var(--primary-color);">سامانه استعلام و برآورد هزینه خدمات</div>
+            <div class="step-heading" style="text-align: center; color: var(--primary-color); justify-content: center;">
+                سامانه استعلام و برآورد هزینه خدمات
+            </div>
             <p style="text-align: center; color: #64748b; font-size: 14px; margin-top: -10px; margin-bottom: 25px;">
                 تضمین کمترین قیمت و زمان تحویل خدمات
             </p>
@@ -235,7 +240,7 @@
             <div class="location-box">
                 <span style="font-size: 20px;">📍</span>
                 <div style="flex: 1;">
-                    <label for="city" style="margin-bottom: 2px; font-size: 12px; color: #64748b;">موقعیت تحویل خدمت:</label>
+                    <label for="city" style="margin-bottom: 2px; font-size: 12px; color: #64748b;">موقعیت ارائه خدمات:</label>
                     <select id="city" style="border: none; background: transparent; padding: 0; font-weight: bold; cursor: pointer;" required>
                         <option value="tehran" selected>تهران</option>
                         <option value="alborz">البرز (کرج و حومه)</option>
@@ -244,8 +249,15 @@
                 </div>
             </div>
 
+            <div class="btn-group">
+                <button type="button" class="btn btn-next" style="font-size: 16px;" onclick="nextStep()">شروع استعلام و ادامه</button>
+            </div>
+        </div>
+
+        <!-- گام ۲: نوع سفارش -->
+        <div class="step" data-step="1">
+            <div class="step-heading">📄 نوع سفارش خود را مشخص کنید: *</div>
             <div class="form-group">
-                <label>نوع سفارش خود را مشخص کنید: *</label>
                 <div class="option-card-group">
                     <label class="option-card">
                         <input type="radio" name="orderType" value="single" required> تک نقشه
@@ -255,15 +267,15 @@
                     </label>
                 </div>
             </div>
-
             <div class="btn-group">
-                <button type="button" class="btn btn-next" style="font-size: 16px;" onclick="nextStep()">شروع استعلام و ادامه</button>
+                <button type="button" class="btn btn-prev" onclick="prevStep()">بازگشت</button>
+                <button type="button" class="btn btn-next" onclick="nextStep()">ادامه</button>
             </div>
         </div>
 
-        <!-- گام ۲: بارگذاری فایل یا تصویر -->
-        <div class="step" data-step="1">
-            <div class="step-heading">بارگذاری فایل نقشه یا تصویر: *</div>
+        <!-- گام ۳: بارگذاری فایل یا تصویر -->
+        <div class="step" data-step="2">
+            <div class="step-heading">📂 بارگذاری فایل نقشه یا تصویر: *</div>
             
             <div class="file-upload-box" onclick="document.getElementById('fileInput').click()">
                 <input type="file" id="fileInput" accept=".step,.stp,.iges,.igs,.dxf,.dwg,.stl,.pdf,.zip,.rar,.jpg,.jpeg,.png,.webp" required style="display:none;" onchange="updateFileName(this)">
@@ -280,9 +292,9 @@
             </div>
         </div>
 
-        <!-- گام ۳: تیراژ -->
-        <div class="step" data-step="2">
-            <div class="step-heading">تیراژ کل (تعداد قطعه): *</div>
+        <!-- گام ۴: تیراژ -->
+        <div class="step" data-step="3">
+            <div class="step-heading">🔢 تیراژ کل (تعداد قطعه): *</div>
             <div class="form-group">
                 <input type="number" id="quantity" min="1" placeholder="مثلاً: ۱۰" required>
             </div>
@@ -292,9 +304,9 @@
             </div>
         </div>
 
-        <!-- گام ۴: جنس متریال -->
-        <div class="step" data-step="3">
-            <div class="step-heading">جنس / متریال قطعه: *</div>
+        <!-- گام ۵: جنس متریال -->
+        <div class="step" data-step="4">
+            <div class="step-heading">🧪 جنس / متریال قطعه: *</div>
             <div class="form-group">
                 <select id="materialSelect" onchange="checkCustomMaterial(this.value)" required>
                     <option value="">انتخاب کنید...</option>
@@ -318,9 +330,9 @@
             </div>
         </div>
 
-        <!-- گام ۵: فرآیند ساخت -->
-        <div class="step" data-step="4">
-            <div class="step-heading">فرآیند ساخت یا دستگاه مد نظر (در صورت اطلاع):</div>
+        <!-- گام ۶: فرآیند ساخت -->
+        <div class="step" data-step="5">
+            <div class="step-heading">⚙️ فرآیند ساخت یا دستگاه مد نظر (در صورت اطلاع):</div>
             <div class="form-group">
                 <select id="processType">
                     <option value="unknown">نیازمند بررسی و تشخیص کارشناس</option>
@@ -342,9 +354,9 @@
             </div>
         </div>
 
-        <!-- گام ۶: تامین متریال -->
-        <div class="step" data-step="5">
-            <div class="step-heading">تامین متریال بر عهده چه کسی است؟ *</div>
+        <!-- گام ۷: تامین متریال -->
+        <div class="step" data-step="6">
+            <div class="step-heading">📦 تامین متریال بر عهده چه کسی است؟ *</div>
             <div class="option-card-group">
                 <label class="option-card">
                     <input type="radio" name="materialSupply" value="workshop" required> مجموعه شما تامین کند
@@ -359,9 +371,9 @@
             </div>
         </div>
 
-        <!-- گام ۷: ساخت نمونه و مهلت تحویل -->
-        <div class="step" data-step="6">
-            <div class="step-heading">نیاز به ساخت نمونه دارید؟ *</div>
+        <!-- گام ۸: ساخت نمونه و مهلت تحویل -->
+        <div class="step" data-step="7">
+            <div class="step-heading">🛠️ نیاز به ساخت نمونه دارید؟ *</div>
             <div class="option-card-group" style="margin-bottom: 25px;">
                 <label class="option-card">
                     <input type="radio" name="sampleNeeded" value="no" required> خیر
@@ -371,7 +383,7 @@
                 </label>
             </div>
 
-            <div class="step-heading" style="font-size: 18px; margin-top: 20px;">مهلت مورد انتظار برای انجام کار: *</div>
+            <div class="step-heading" style="font-size: 18px; margin-top: 20px;">⏱️ مهلت مورد انتظار برای انجام کار: *</div>
             <div class="form-group">
                 <select id="deadline" required>
                     <option value="">انتخاب کنید...</option>
@@ -389,8 +401,8 @@
             </div>
         </div>
 
-        <!-- گام ۸: تایید موبایل و ثبت -->
-        <div class="step" data-step="7">
+        <!-- گام ۹: تایید موبایل و ثبت -->
+        <div class="step" data-step="8">
             <div class="step-heading">📱 احراز هویت و ثبت نهایی</div>
 
             <div class="notice-box">
@@ -411,7 +423,7 @@
 
             <div class="btn-group">
                 <button type="button" class="btn btn-prev" onclick="prevStep()">بازگشت</button>
-                <button type="submit" class="btn btn-submit">ثبت نهایی درخواست 🎉</button>
+                <button type="submit" class="btn btn-submit">ثبت نهایی درخواست</button>
             </div>
         </div>
 
@@ -420,7 +432,7 @@
 
 <script>
     let currentStep = 0;
-    const totalSteps = 8;
+    const totalSteps = 9;
     const steps = document.querySelectorAll(".step");
     const progressBarFill = document.getElementById("progressBarFill");
 
@@ -459,8 +471,8 @@
     function validateCurrentStep() {
         const currentElem = steps[currentStep];
 
-        // ۱. بررسی انتخاب دکمه رادیویی در گام اول
-        if (currentStep === 0) {
+        // ۱. بررسی انتخاب دکمه رادیویی در گام دوم (نوع سفارش)
+        if (currentStep === 1) {
             const checked = currentElem.querySelector("input[name='orderType']:checked");
             if (!checked) {
                 alert("لطفاً نوع سفارش خود (تک نقشه یا مجموعه) را مشخص کنید.");
@@ -468,8 +480,8 @@
             }
         }
 
-        // ۲. بررسی انتخاب فایل در گام دوم
-        if (currentStep === 1) {
+        // ۲. بررسی انتخاب فایل در گام سوم
+        if (currentStep === 2) {
             const fileInput = document.getElementById("fileInput");
             if (!fileInput.files.length) {
                 alert("لطفاً ابتدا فایل یا تصویر نقشه خود را انتخاب کنید.");
