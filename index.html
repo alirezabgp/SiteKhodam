@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سامانه استعلام قیمت خدمات</title>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="theme-color" content="#0d6efd">
+    <meta name="description" content="ارسال نقشه و دریافت پیش‌فاکتور ساخت قطعات صنعتی: فرزکاری و تراشکاری CNC، سنگین‌تراش و برش لیزر در تهران">
+    <title>استعلام قیمت ساخت قطعات صنعتی</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
         :root {
@@ -23,7 +26,21 @@
             color: var(--text-color);
             line-height: 1.6;
             margin: 0;
-            padding: 15px;
+            padding: 15px 15px 90px;
+        }
+
+        button, summary { font-family: 'Vazirmatn', Tahoma, sans-serif; }
+
+        button:focus-visible, summary:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px var(--primary-light), 0 0 0 5px var(--primary-color);
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+            flex-shrink: 0;
         }
 
         .wizard-card {
@@ -41,6 +58,13 @@
         .progress-container {
             margin-bottom: 25px;
             display: none;
+        }
+
+        .step-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            margin-bottom: 8px;
         }
 
         .progress-bar-track {
@@ -182,6 +206,45 @@
             background-color: #d0e1fd;
         }
 
+        .later-check {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 16px 0 0;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .later-check input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .later-hint {
+            display: none;
+            margin-top: 10px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.9;
+        }
+
+        .link-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
         .btn-group {
             display: flex;
             justify-content: space-between;
@@ -231,12 +294,29 @@
             flex-shrink: 0;
         }
 
-        /* هدر منوی سه‌خطی */
+        /* هدر و منوی سه‌خطی */
         .header-nav {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
             position: relative;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 800;
+            font-size: 17px;
+            color: #1e293b;
+        }
+
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            color: var(--primary-color);
+            --sw: 6;
         }
 
         .hamburger-btn {
@@ -266,9 +346,10 @@
             border: 1px solid var(--border-color);
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            width: 180px;
+            width: 190px;
             display: none;
             z-index: 100;
+            overflow: hidden;
         }
 
         .dropdown-menu.show {
@@ -279,7 +360,6 @@
             padding: 12px 16px;
             font-size: 14px;
             font-weight: 600;
-            font-family: 'Vazirmatn', Tahoma, sans-serif;
             color: var(--text-color);
             cursor: pointer;
             border: none;
@@ -308,7 +388,7 @@
 
         #bottomToast {
             position: fixed;
-            bottom: -60px;
+            bottom: -80px;
             left: 0;
             width: 100%;
             background-color: #f8d7da;
@@ -321,6 +401,12 @@
             box-sizing: border-box;
             transition: bottom 0.3s ease-in-out;
             z-index: 1000;
+        }
+
+        #bottomToast.success {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            border-top-color: #badbcc;
         }
 
         #bottomToast.show {
@@ -374,24 +460,466 @@
             font-size: 12px;
             color: #64748b;
         }
+
+        /* ===== صفحه نخست ===== */
+        .hero {
+            text-align: center;
+            padding: 26px 16px 22px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            background-color: #f7faff;
+            background-image:
+                linear-gradient(rgba(13,110,253,.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(13,110,253,.07) 1px, transparent 1px);
+            background-size: 22px 22px;
+            border: 1px solid #dbe7fb;
+        }
+
+        .hero-part {
+            width: 96px;
+            height: 96px;
+            color: var(--primary-color);
+            --sw: 2.5;
+            margin-bottom: 6px;
+        }
+
+        .hero-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #1e293b;
+            margin: 0 0 8px;
+            line-height: 1.6;
+        }
+
+        .hero-sub {
+            margin: 0;
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.9;
+        }
+
+        .cta-note {
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+            margin: 12px 0 0;
+        }
+
+        .trust-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            list-style: none;
+            padding: 0;
+            margin: 20px 0 0;
+        }
+
+        .trust-row li {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: #f1f5f9;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .trust-row .icon {
+            width: 16px;
+            height: 16px;
+            color: var(--success-color);
+        }
+
+        .home-extras {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .sec {
+            margin-top: 34px;
+        }
+
+        .sec h2 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1e293b;
+            margin: 0 0 6px;
+        }
+
+        .sec-sub {
+            font-size: 13px;
+            color: #64748b;
+            margin: 0 0 14px;
+        }
+
+        .how-list {
+            list-style: none;
+            padding: 0;
+            margin: 14px 0 0;
+        }
+
+        .how-list li {
+            display: flex;
+            gap: 14px;
+            position: relative;
+            padding-bottom: 18px;
+        }
+
+        .how-list li:not(:last-child)::before {
+            content: "";
+            position: absolute;
+            top: 34px;
+            bottom: 2px;
+            right: 15px;
+            width: 2px;
+            background: var(--border-color);
+        }
+
+        .how-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: #fff;
+            font-weight: 800;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .how-list h3 {
+            margin: 3px 0 2px;
+            font-size: 15px;
+            color: #1e293b;
+        }
+
+        .how-list p {
+            margin: 0;
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.8;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 10px;
+            background: #fff;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: right;
+            color: var(--text-color);
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .service-item:hover {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+        }
+
+        .service-item::after {
+            content: "‹";
+            margin-right: auto;
+            font-size: 24px;
+            line-height: 1;
+            color: #94a3b8;
+        }
+
+        .service-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .service-item strong {
+            display: block;
+            font-size: 15px;
+            color: #1e293b;
+        }
+
+        .service-item small {
+            display: block;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .format-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            direction: ltr;
+            justify-content: flex-end;
+            list-style: none;
+            padding: 0;
+            margin: 0 0 12px;
+        }
+
+        .format-row li {
+            padding: 5px 12px;
+            border-radius: 8px;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            font-size: 12px;
+            font-weight: 700;
+            color: #475569;
+            letter-spacing: 0.3px;
+        }
+
+        .format-note {
+            font-size: 13px;
+            color: #475569;
+            margin: 0;
+            line-height: 1.9;
+        }
+
+        details {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        summary {
+            padding: 14px 16px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e293b;
+            cursor: pointer;
+            list-style: none;
+        }
+
+        summary::-webkit-details-marker { display: none; }
+
+        summary::after {
+            content: "+";
+            float: left;
+            font-weight: 400;
+            font-size: 20px;
+            line-height: 1.2;
+            color: #64748b;
+        }
+
+        details[open] summary::after { content: "−"; }
+
+        details p {
+            margin: 0;
+            padding: 0 16px 14px;
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.9;
+        }
+
+        .site-footer {
+            margin-top: 40px;
+            padding: 24px 20px;
+            background: #fff;
+            border-radius: 16px;
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 800;
+            font-size: 16px;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .footer-text {
+            margin: 0 0 18px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .site-footer h3 {
+            margin: 0 0 10px;
+            font-size: 14px;
+            color: #334155;
+        }
+
+        .msg-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .msg-btn {
+            flex: 1 1 28%;
+            padding: 11px 10px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            background: #fafbfc;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .msg-btn:hover {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .msg-note {
+            margin: 10px 0 0;
+            font-size: 12px;
+            color: #64748b;
+            line-height: 1.8;
+        }
+
+        .footer-line {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            margin-top: 18px;
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.9;
+        }
+
+        .footer-line .icon {
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .footer-line a {
+            color: var(--primary-color);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .copyright {
+            margin: 22px 0 0;
+            padding-top: 14px;
+            border-top: 1px solid var(--border-color);
+            font-size: 12px;
+            color: #94a3b8;
+            text-align: center;
+        }
+
+        /* دکمه ثابت پیام‌رسان */
+        .fab {
+            position: fixed;
+            bottom: 18px;
+            left: 16px;
+            z-index: 90;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 999px;
+            background: var(--primary-color);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(13,110,253,0.35);
+        }
+
+        .contact-sheet {
+            position: fixed;
+            bottom: 76px;
+            left: 16px;
+            right: 16px;
+            max-width: 340px;
+            z-index: 95;
+            display: none;
+            background: #fff;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+            border: 1px solid var(--border-color);
+        }
+
+        .contact-sheet.show { display: block; }
+
+        .contact-sheet h3 {
+            margin: 0 0 4px;
+            font-size: 15px;
+            color: #1e293b;
+        }
+
+        .contact-sheet p.sheet-sub {
+            margin: 0 0 12px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { animation: none !important; transition: none !important; }
+        }
     </style>
 </head>
 <body>
+
+<!-- آیکون‌ها -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-part" viewBox="0 0 120 120">
+        <g fill="none" stroke="currentColor" stroke-linecap="round" style="stroke-width:var(--sw,2.5)">
+            <circle cx="60" cy="60" r="50"/>
+            <circle cx="60" cy="60" r="18"/>
+            <circle cx="94" cy="60" r="5"/>
+            <circle cx="77" cy="89.4" r="5"/>
+            <circle cx="43" cy="89.4" r="5"/>
+            <circle cx="26" cy="60" r="5"/>
+            <circle cx="43" cy="30.6" r="5"/>
+            <circle cx="77" cy="30.6" r="5"/>
+        </g>
+        <g stroke="currentColor" opacity=".55" stroke-dasharray="6 3 1 3" style="stroke-width:calc(var(--sw,2.5) * .4)">
+            <line x1="2" y1="60" x2="118" y2="60"/>
+            <line x1="60" y1="2" x2="60" y2="118"/>
+        </g>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></symbol>
+    <symbol id="i-tool" viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></symbol>
+</svg>
 
 <div id="bottomToast">لطفاً به سوالات پاسخ دهید.</div>
 
 <div class="wizard-card">
 
-    <!-- منوی سه‌خطی -->
+    <!-- هدر و منوی سه‌خطی -->
     <div class="header-nav">
-        <button type="button" class="hamburger-btn" id="menuBtn">☰</button>
+        <div class="brand">
+            <svg class="brand-logo" aria-hidden="true"><use href="#i-part"/></svg>
+            <span class="js-brand">ساخت‌یار</span>
+        </div>
+        <button type="button" class="hamburger-btn" id="menuBtn" aria-label="منو">☰</button>
         <div id="dropdownMenu" class="dropdown-menu">
             <button type="button" class="dropdown-item" onclick="openTrackingView()">پیگیری سفارش</button>
+            <button type="button" class="dropdown-item" onclick="goTo('faq')">سوالات متداول</button>
+            <button type="button" class="dropdown-item" onclick="goTo('contact')">تماس و آدرس</button>
         </div>
     </div>
 
     <!-- نوار پیشرفت -->
     <div class="progress-container" id="progressContainer">
+        <div class="step-label" id="stepLabel"></div>
         <div class="progress-bar-track">
             <div class="progress-bar-fill" id="progressBarFill"></div>
         </div>
@@ -401,12 +929,11 @@
 
         <!-- گام ۱: صفحه نخست -->
         <div class="step active" data-step="0">
-            <div class="step-heading" id="heading-0" style="text-align: center; color: var(--primary-color); justify-content: center; display: block;">
-                سامانه استعلام و برآورد هزینه خدمات
+            <div class="hero">
+                <svg class="hero-part" aria-hidden="true"><use href="#i-part"/></svg>
+                <h1 class="hero-title" id="heading-0">نقشه را بفرستید، پیش‌فاکتور را بگیرید</h1>
+                <p class="hero-sub">ساخت قطعات صنعتی با فرز، تراش و برش لیزر، بدون نیاز به تماس تلفنی</p>
             </div>
-            <p style="text-align: center; color: #64748b; font-size: 14px; margin-top: -5px; margin-bottom: 25px;">
-                تضمین کمترین قیمت و زمان تحویل خدمات
-            </p>
 
             <div class="location-box">
                 <svg class="location-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
@@ -420,9 +947,16 @@
                 </div>
             </div>
 
-            <div class="btn-group">
+            <div class="btn-group" style="margin-top: 0;">
                 <button type="button" class="btn btn-next" style="font-size: 16px;" onclick="nextStep()">ثبت سفارش</button>
             </div>
+            <p class="cta-note">پر کردن فرم حدود ۲ دقیقه زمان می‌برد</p>
+
+            <ul class="trust-row">
+                <li><svg class="icon"><use href="#i-check"/></svg>استعلام رایگان</li>
+                <li><svg class="icon"><use href="#i-lock"/></svg>محرمانگی نقشه‌ها</li>
+                <li><svg class="icon"><use href="#i-chat"/></svg>ارسال فایل از پیام‌رسان</li>
+            </ul>
         </div>
 
         <!-- گام ۲: نوع سفارش -->
@@ -456,6 +990,16 @@
                     فایل‌های مهندسی یا <strong>تصویر نقشه دستی/کاغذی (JPG, PNG)</strong>
                 </p>
             </div>
+
+            <label class="later-check" for="fileLater">
+                <input type="checkbox" id="fileLater">
+                فایل را بعداً از طریق پیام‌رسان می‌فرستم
+            </label>
+            <div class="later-hint" id="laterHint">
+                پس از ثبت درخواست، فایل را به شماره‌ی <strong class="js-phone"></strong> در بله، ایتا، روبیکا، تلگرام یا واتس‌اپ بفرستید.
+                <button type="button" class="link-btn" onclick="toggleContactSheet(event)">نمایش پیام‌رسان‌ها</button>
+            </div>
+
             <div class="btn-group">
                 <button type="button" class="btn btn-prev" onclick="prevStep()">بازگشت</button>
                 <button type="button" class="btn btn-next" onclick="nextStep()">ادامه</button>
@@ -621,7 +1165,176 @@
 
 </div>
 
+<!-- ===== بخش‌های زیر صفحه نخست ===== -->
+<main class="home-extras" id="homeExtras">
+
+    <section class="sec" id="how">
+        <h2>چطور کار می‌کند؟</h2>
+        <ol class="how-list">
+            <li>
+                <span class="how-num">۱</span>
+                <div>
+                    <h3>نقشه را بفرستید</h3>
+                    <p>فایل مهندسی یا عکس نقشه دستی را در فرم بارگذاری کنید، یا از طریق پیام‌رسان بفرستید.</p>
+                </div>
+            </li>
+            <li>
+                <span class="how-num">۲</span>
+                <div>
+                    <h3>بررسی فنی</h3>
+                    <p>کارشناس نقشه، جنس، تیراژ و فرآیند ساخت را بررسی می‌کند.</p>
+                </div>
+            </li>
+            <li>
+                <span class="how-num">۳</span>
+                <div>
+                    <h3>پیش‌فاکتور دریافت کنید</h3>
+                    <p>قیمت و زمان تحویل را برایتان ارسال می‌کنیم.</p>
+                </div>
+            </li>
+        </ol>
+    </section>
+
+    <section class="sec" id="services">
+        <h2>خدمات</h2>
+        <p class="sec-sub">یک خدمت را انتخاب کنید تا فرم همان‌جا شروع شود.</p>
+
+        <button type="button" class="service-item" onclick="startWith('cnc_milling')">
+            <span class="service-icon"><svg class="icon"><use href="#i-gear"/></svg></span>
+            <span><strong>فرزکاری CNC</strong><small>قطعات با شکل‌های پیچیده</small></span>
+        </button>
+        <button type="button" class="service-item" onclick="startWith('cnc_turning')">
+            <span class="service-icon"><svg class="icon"><use href="#i-tool"/></svg></span>
+            <span><strong>تراشکاری CNC</strong><small>قطعات گرد و استوانه‌ای</small></span>
+        </button>
+        <button type="button" class="service-item" onclick="startWith('heavy_turning')">
+            <span class="service-icon"><svg class="icon"><use href="#i-gear"/></svg></span>
+            <span><strong>سنگین‌تراش</strong><small>قطعات بزرگ و سنگین</small></span>
+        </button>
+        <button type="button" class="service-item" onclick="startWith('manual_turning')">
+            <span class="service-icon"><svg class="icon"><use href="#i-tool"/></svg></span>
+            <span><strong>تراشکاری و فرزکاری دستی</strong><small>ساخت تک‌قطعه و کارهای سفارشی</small></span>
+        </button>
+        <button type="button" class="service-item" onclick="startWith('laser_cut')">
+            <span class="service-icon"><svg class="icon"><use href="#i-bolt"/></svg></span>
+            <span><strong>برش لیزر</strong><small>برش ورق با لیزر</small></span>
+        </button>
+    </section>
+
+    <section class="sec" id="formats">
+        <h2>فرمت فایل‌های قابل قبول</h2>
+        <ul class="format-row">
+            <li>STEP</li><li>IGES</li><li>DXF</li><li>DWG</li><li>STL</li><li>PDF</li><li>ZIP</li><li>JPG</li><li>PNG</li>
+        </ul>
+        <p class="format-note">نقشه دستی روی کاغذ هم پذیرفته می‌شود. کافی است یک عکس واضح و کامل از آن بگیرید.</p>
+    </section>
+
+    <!--
+    بخش نمونه‌کار (وقتی عکس واقعی قطعات ساخته‌شده را داشتید، این بلوک را از حالت کامنت خارج کنید):
+
+    <section class="sec" id="gallery">
+        <h2>نمونه‌کارها</h2>
+        <p class="sec-sub">قطعات ساخته‌شده در کارگاه</p>
+        عکس‌ها را اینجا اضافه کنید
+    </section>
+    -->
+
+    <section class="sec" id="faq">
+        <h2>سوالات متداول</h2>
+        <details>
+            <summary>قیمت چطور محاسبه می‌شود؟</summary>
+            <p>قیمت بر اساس نقشه، جنس، تیراژ، فرآیند ساخت و مهلت تحویل محاسبه می‌شود. پس از بررسی فنی، پیش‌فاکتور برای شما ارسال می‌شود.</p>
+        </details>
+        <details>
+            <summary>نقشه ندارم، چه کنم؟</summary>
+            <p>عکس واضح نقشه دستی هم قبول است. اگر هیچ‌کدام را ندارید، موضوع را از طریق پیام‌رسان بنویسید تا راهنمایی شوید.</p>
+        </details>
+        <details>
+            <summary>فایل را چطور بفرستم؟</summary>
+            <p>در مرحله‌ی سوم فرم می‌توانید فایل را بارگذاری کنید. اگر فایل سنگین است، گزینه‌ی «بعداً از طریق پیام‌رسان می‌فرستم» را بزنید و فایل را در بله، ایتا، روبیکا، تلگرام یا واتس‌اپ بفرستید.</p>
+        </details>
+        <details>
+            <summary>مهلت تحویل چقدر است؟</summary>
+            <p>در فرم یکی از سه گزینه را انتخاب می‌کنید: فوری (۱ تا ۲ روز کاری)، عادی (۳ تا ۵ روز کاری) یا یک هفته کاری. زمان نهایی در پیش‌فاکتور اعلام می‌شود.</p>
+        </details>
+        <details>
+            <summary>نقشه‌های من محرمانه می‌مانند؟</summary>
+            <p>فایل‌هایتان فقط برای بررسی فنی و قیمت‌گذاری استفاده می‌شود و در اختیار دیگران قرار نمی‌گیرد.</p>
+        </details>
+    </section>
+
+    <footer class="site-footer" id="contact">
+        <div class="footer-brand">
+            <svg class="brand-logo" aria-hidden="true" style="color: var(--primary-color)"><use href="#i-part"/></svg>
+            <span class="js-brand">ساخت‌یار</span>
+        </div>
+        <p class="footer-text">ساخت قطعات صنعتی با فرز، تراش و برش لیزر</p>
+
+        <h3>ارسال فایل و گفتگو در پیام‌رسان</h3>
+        <div class="msg-list" id="footerMessengers"></div>
+        <p class="msg-note">تلگرام و واتس‌اپ ممکن است نیاز به فیلترشکن داشته باشند.</p>
+
+        <div class="footer-line">
+            <svg class="icon"><use href="#i-chat"/></svg>
+            <div>
+                شماره پیام‌رسان‌ها: <strong class="js-phone"></strong>
+                <button type="button" class="link-btn" onclick="copyPhone()">کپی</button>
+            </div>
+        </div>
+
+        <div class="footer-line">
+            <svg class="icon"><use href="#i-pin"/></svg>
+            <div>
+                <span id="addressText"></span><br>
+                <a id="mapLink" href="#" target="_blank" rel="noopener">مشاهده روی نقشه</a>
+            </div>
+        </div>
+
+        <p class="copyright">© <span id="copyYear"></span> <span class="js-brand">ساخت‌یار</span></p>
+    </footer>
+
+</main>
+
+<!-- دکمه ثابت پیام‌رسان -->
+<button type="button" class="fab" id="fabBtn" onclick="toggleContactSheet(event)">
+    <svg class="icon"><use href="#i-chat"/></svg>
+    ارسال نقشه
+</button>
+<div class="contact-sheet" id="contactSheet">
+    <h3>ارسال نقشه و گفتگو</h3>
+    <p class="sheet-sub">در یکی از پیام‌رسان‌ها به ما پیام بدهید.</p>
+    <div class="msg-list" id="sheetMessengers"></div>
+    <p class="msg-note">تلگرام و واتس‌اپ ممکن است نیاز به فیلترشکن داشته باشند.</p>
+</div>
+
 <script>
+    /* ============ تنظیمات: فقط این بخش را ویرایش کنید ============ */
+    const CONFIG = {
+        brand: "ساخت‌یار",                 // نام کارگاه
+        phone: "09981011536",              // شماره پیام‌رسان‌ها (۱۱ رقم، بدون فاصله)
+        address: "تهران، بزرگراه فتح (آوینی) شرق به غرب، پس از پل شیر پاستوریزه، خیابان فتح ۱۱ (آریسمان)، کوچه گلبن ۵ شرقی، پلاک ۵",
+        // لینک مستقیم پیام‌رسان‌ها. اگر خالی باشد:
+        //  - تلگرام و واتس‌اپ با شماره‌ی بالا ساخته می‌شوند
+        //  - بله، ایتا و روبیکا شماره را کپی می‌کنند تا مشتری جستجو کند
+        // مثال: bale: "https://ble.ir/نام_کاربری"
+        links: {
+            telegram: "",
+            whatsapp: "",
+            bale: "https://bale.ai/PishFactorB",
+            eitaa: "https://eitaa.com/PishfactorI",
+            rubika: "https://rubika.ir/PishFactor"
+        }
+    };
+
+    const MESSENGERS = [
+        { id: "bale", name: "بله" },
+        { id: "eitaa", name: "ایتا" },
+        { id: "rubika", name: "روبیکا" },
+        { id: "telegram", name: "تلگرام" },
+        { id: "whatsapp", name: "واتس‌اپ" }
+    ];
+    /* ============================================================ */
+
     let currentStep = 0;
     const totalSteps = 9;
     const steps = document.querySelectorAll(".step");
@@ -629,56 +1342,13 @@
     const progressContainer = document.getElementById("progressContainer");
     const multiStepForm = document.getElementById("multiStepForm");
     const trackingView = document.getElementById("trackingView");
-
-    function updateProgress() {
-        if (currentStep === 0) {
-            progressContainer.style.display = "none";
-        } else {
-            progressContainer.style.display = "block";
-            const percent = Math.round(((currentStep + 1) / totalSteps) * 100);
-            progressBarFill.style.width = percent + "%";
-        }
-    }
-
-    function showStep(stepIndex) {
-        steps.forEach(function (step, index) {
-            step.classList.toggle("active", index === stepIndex);
-        });
-        currentStep = stepIndex;
-        updateProgress();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    // کنترل منوی همبرگری
+    const homeExtras = document.getElementById("homeExtras");
+    const contactSheet = document.getElementById("contactSheet");
     const menuBtn = document.getElementById("menuBtn");
     const dropdownMenu = document.getElementById("dropdownMenu");
 
-    menuBtn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        dropdownMenu.classList.toggle("show");
-    });
-
-    document.addEventListener("click", function () {
-        dropdownMenu.classList.remove("show");
-    });
-
-    function showBottomToast(message) {
-        const toast = document.getElementById("bottomToast");
-        toast.textContent = message || "لطفاً به سوالات پاسخ دهید.";
-        toast.classList.add("show");
-        setTimeout(function () {
-            toast.classList.remove("show");
-        }, 3000);
-    }
-
-    function triggerShake(elementId) {
-        const heading = document.getElementById(elementId);
-        if (heading) {
-            heading.classList.add("shake-animation");
-            setTimeout(function () {
-                heading.classList.remove("shake-animation");
-            }, 400);
-        }
+    function toFa(n) {
+        return String(n).replace(/\d/g, function (d) { return "۰۱۲۳۴۵۶۷۸۹"[d]; });
     }
 
     // تبدیل ارقام فارسی و عربی به انگلیسی
@@ -692,6 +1362,185 @@
         return /^09\d{9}$/.test(toEnglishDigits(value).trim());
     }
 
+    /* ---------- نوار پیشرفت و نمایش گام‌ها ---------- */
+    function updateProgress() {
+        if (currentStep === 0) {
+            progressContainer.style.display = "none";
+        } else {
+            progressContainer.style.display = "block";
+            const percent = Math.round(((currentStep + 1) / totalSteps) * 100);
+            progressBarFill.style.width = percent + "%";
+            document.getElementById("stepLabel").textContent =
+                "مرحله " + toFa(currentStep) + " از " + toFa(totalSteps - 1);
+        }
+    }
+
+    function syncHome() {
+        const onHome = currentStep === 0 && trackingView.style.display !== "block";
+        homeExtras.style.display = onHome ? "block" : "none";
+    }
+
+    function showStep(stepIndex) {
+        steps.forEach(function (step, index) {
+            step.classList.toggle("active", index === stepIndex);
+        });
+        currentStep = stepIndex;
+        updateProgress();
+        syncHome();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    /* ---------- منوی همبرگری و پنجره‌ی پیام‌رسان ---------- */
+    menuBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        contactSheet.classList.remove("show");
+        dropdownMenu.classList.toggle("show");
+    });
+
+    function toggleContactSheet(e) {
+        if (e) e.stopPropagation();
+        dropdownMenu.classList.remove("show");
+        contactSheet.classList.toggle("show");
+    }
+
+    contactSheet.addEventListener("click", function (e) { e.stopPropagation(); });
+
+    document.addEventListener("click", function () {
+        dropdownMenu.classList.remove("show");
+        contactSheet.classList.remove("show");
+    });
+
+    function goTo(id) {
+        dropdownMenu.classList.remove("show");
+        if (trackingView.style.display === "block") closeTrackingView();
+        if (currentStep !== 0) showStep(0);
+        syncHome();
+        setTimeout(function () {
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 80);
+    }
+
+    function startWith(processValue) {
+        document.getElementById("processType").value = processValue;
+        showStep(1);
+    }
+
+    /* ---------- پیام‌ها ---------- */
+    function showBottomToast(message, type) {
+        const toast = document.getElementById("bottomToast");
+        toast.textContent = message || "لطفاً به سوالات پاسخ دهید.";
+        toast.classList.toggle("success", type === "success");
+        toast.classList.add("show");
+        clearTimeout(showBottomToast._t);
+        showBottomToast._t = setTimeout(function () {
+            toast.classList.remove("show");
+        }, 3200);
+    }
+
+    function triggerShake(elementId) {
+        const heading = document.getElementById(elementId);
+        if (heading) {
+            heading.classList.add("shake-animation");
+            setTimeout(function () {
+                heading.classList.remove("shake-animation");
+            }, 400);
+        }
+    }
+
+    function fail(headingId, message) {
+        showBottomToast(message);
+        triggerShake(headingId);
+        return false;
+    }
+
+    /* ---------- پیام‌رسان‌ها ---------- */
+    function intlPhone() {
+        return "98" + CONFIG.phone.replace(/^0/, "");
+    }
+
+    function getLink(id) {
+        if (CONFIG.links[id]) return CONFIG.links[id];
+        if (id === "telegram") return "https://t.me/+" + intlPhone();
+        if (id === "whatsapp") return "https://wa.me/" + intlPhone();
+        return "";
+    }
+
+    function fallbackCopy(text) {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        let ok = false;
+        try { ok = document.execCommand("copy"); } catch (err) { ok = false; }
+        document.body.removeChild(ta);
+        return ok;
+    }
+
+    function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            return navigator.clipboard.writeText(text)
+                .then(function () { return true; })
+                .catch(function () { return fallbackCopy(text); });
+        }
+        return Promise.resolve(fallbackCopy(text));
+    }
+
+    function copyPhone() {
+        copyText(CONFIG.phone).then(function (ok) {
+            showBottomToast(ok ? "شماره کپی شد." : "کپی انجام نشد: " + toFa(CONFIG.phone), ok ? "success" : "");
+        });
+    }
+
+    function openMessenger(id) {
+        const url = getLink(id);
+        if (url) {
+            window.open(url, "_blank", "noopener");
+            return;
+        }
+        const m = MESSENGERS.filter(function (x) { return x.id === id; })[0];
+        copyText(CONFIG.phone).then(function (ok) {
+            showBottomToast(
+                ok ? "شماره کپی شد. آن را در «" + m.name + "» جستجو کنید و فایل را بفرستید."
+                   : "شماره را در «" + m.name + "» جستجو کنید: " + toFa(CONFIG.phone),
+                "success"
+            );
+        });
+    }
+
+    function renderMessengers(containerId) {
+        const box = document.getElementById(containerId);
+        MESSENGERS.forEach(function (m) {
+            const b = document.createElement("button");
+            b.type = "button";
+            b.className = "msg-btn";
+            b.textContent = m.name;
+            b.addEventListener("click", function () { openMessenger(m.id); });
+            box.appendChild(b);
+        });
+    }
+
+    function initSite() {
+        document.title = CONFIG.brand + " | استعلام قیمت ساخت قطعات صنعتی";
+        document.querySelectorAll(".js-brand").forEach(function (el) { el.textContent = CONFIG.brand; });
+        document.querySelectorAll(".js-phone").forEach(function (el) { el.textContent = toFa(CONFIG.phone); });
+        document.getElementById("addressText").textContent = CONFIG.address;
+        document.getElementById("mapLink").href =
+            "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(CONFIG.address);
+        try {
+            document.getElementById("copyYear").textContent =
+                new Intl.DateTimeFormat("fa-IR", { year: "numeric" }).format(new Date());
+        } catch (err) {
+            document.getElementById("copyYear").textContent = "";
+        }
+        renderMessengers("footerMessengers");
+        renderMessengers("sheetMessengers");
+        syncHome();
+    }
+
+    /* ---------- فرم ---------- */
     function updateFileName(input) {
         const display = document.getElementById("fileNameDisplay");
         if (input.files && input.files[0]) {
@@ -700,15 +1549,13 @@
         }
     }
 
+    document.getElementById("fileLater").addEventListener("change", function () {
+        document.getElementById("laterHint").style.display = this.checked ? "block" : "none";
+    });
+
     function checkCustomMaterial(val) {
         const customGroup = document.getElementById("customMaterialGroup");
         customGroup.style.display = (val === "custom") ? "block" : "none";
-    }
-
-    function fail(headingId, message) {
-        showBottomToast(message);
-        triggerShake(headingId);
-        return false;
     }
 
     function validateCurrentStep() {
@@ -723,10 +1570,11 @@
             }
         }
 
-        // گام ۳: فایل
+        // گام ۳: فایل (یا انتخاب ارسال بعدی از پیام‌رسان)
         if (currentStep === 2) {
             const fileInput = document.getElementById("fileInput");
-            if (!fileInput.files.length) {
+            const later = document.getElementById("fileLater").checked;
+            if (!fileInput.files.length && !later) {
                 return fail("heading-2");
             }
         }
@@ -783,11 +1631,13 @@
         }
     }
 
+    /* ---------- پیگیری سفارش ---------- */
     function openTrackingView() {
         dropdownMenu.classList.remove("show");
         multiStepForm.style.display = "none";
         progressContainer.style.display = "none";
         trackingView.style.display = "block";
+        syncHome();
     }
 
     function closeTrackingView() {
@@ -795,6 +1645,7 @@
         document.getElementById("trackingResultBox").style.display = "none";
         multiStepForm.style.display = "block";
         updateProgress();
+        syncHome();
     }
 
     function showTrackingResult() {
@@ -806,6 +1657,7 @@
         document.getElementById("trackingResultBox").style.display = "block";
     }
 
+    /* ---------- تایید موبایل و ثبت نهایی ---------- */
     function sendOTP() {
         const phone = document.getElementById("phone").value;
         if (!isValidPhone(phone)) {
@@ -834,6 +1686,9 @@
         // TODO: ارسال اطلاعات فرم به سرور
         alert("درخواست شما با موفقیت ثبت شد.");
     });
+
+    initSite();
+    updateProgress();
 </script>
 
 </body>
