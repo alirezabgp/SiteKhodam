@@ -906,19 +906,6 @@
             background: #fff;
             overflow: hidden;
         }
-        .map-card h4 {
-            margin: 0;
-            padding: 12px 14px 4px;
-            font-size: 15px;
-            color: #1e293b;
-        }
-        .map-card .map-addr {
-            margin: 0;
-            padding: 0 14px 10px;
-            font-size: 13px;
-            color: #475569;
-            line-height: 1.9;
-        }
         .neshan-map {
             position: relative;
             width: 100%;
@@ -950,12 +937,6 @@
             border-radius: 50% 50% 50% 0;
             transform: rotate(-45deg);
             box-shadow: 0 2px 6px rgba(0,0,0,.35);
-        }
-        .map-coords {
-            padding: 10px 14px;
-            font-size: 13px;
-            color: #475569;
-            border-top: 1px solid var(--border-color);
         }
         .map-actions {
             display: flex;
@@ -1139,7 +1120,7 @@
                 فایل را بعداً از طریق پیام‌رسان می‌فرستم
             </label>
             <div class="later-hint" id="laterHint">
-                پس از ثبت درخواست، فایل را به شماره‌ی <strong class="js-phone"></strong> در بله، ایتا، روبیکا، تلگرام یا واتس‌اپ بفرستید.
+                پس از ثبت درخواست، فایل را از طریق یکی از پیام‌رسان‌های بله، ایتا، روبیکا، تلگرام یا واتس‌اپ بفرستید.
                 <button type="button" class="link-btn" onclick="toggleContactSheet(event)">نمایش پیام‌رسان‌ها</button>
             </div>
 
@@ -1419,14 +1400,6 @@
         <p class="msg-note">تلگرام و واتس‌اپ ممکن است نیاز به فیلترشکن داشته باشند.</p>
 
         <div class="footer-line">
-            <svg class="icon"><use href="#i-chat"/></svg>
-            <div>
-                شماره پیام‌رسان‌ها: <strong class="js-phone"></strong>
-                <button type="button" class="link-btn" onclick="copyPhone()">کپی</button>
-            </div>
-        </div>
-
-        <div class="footer-line">
             <svg class="icon"><use href="#i-pin"/></svg>
             <div>
                 <span id="addressText"></span><br>
@@ -1435,21 +1408,14 @@
         </div>
 
         <div class="map-card" id="mapCard">
-            <h4>موقعیت ما روی نقشه</h4>
-            <p class="map-addr" id="mapAddr"></p>
             <div id="neshanMap" class="neshan-map" role="img" aria-label="موقعیت کارگاه روی نقشه نشان">
                 <a id="mapFallback" class="map-fallback" href="#" target="_blank" rel="noopener">
                     <svg class="icon"><use href="#i-pin"/></svg>
                     <span>نمایش موقعیت در نشان</span>
                 </a>
             </div>
-            <div class="map-coords">
-                موقعیت جغرافیایی:
-                <strong id="mapCoords"></strong>
-            </div>
-            <div class="map-actions">
+            <div class="map-actions" style="padding-top:14px">
                 <a id="mapNeshan" href="#" target="_blank" rel="noopener">مشاهده در نشان</a>
-                <button type="button" onclick="copyCoords()">کپی موقعیت</button>
             </div>
         </div>
 
@@ -1478,7 +1444,7 @@
         lat: 35.6787539,                    // عرض جغرافیایی
         lng: 51.300975,                     // طول جغرافیایی
         mapUrl: "https://neshan.org/maps/places/sbveHv_xVmj1",   // لینک نشان
-        neshanKey: "",                      // کلید نقشه‌ی نشان (web.xxxx) از developer.neshan.org؛ اگر خالی باشد فقط دکمه‌ی «نمایش در نشان» دیده می‌شود
+        neshanKey: "web.6dde863fb97a4c46aea24bdca1d895a4",                      // کلید نقشه‌ی نشان (web.xxxx) از platform.neshan.org (رایگان)؛ تا وقتی خالی است نقشه‌ی زنده نشان داده نمی‌شود و فقط دکمه‌ی «نمایش در نشان» دیده می‌شود
         address: "تهران، بزرگراه فتح (آوینی) شرق به غرب، پس از پل شیر پاستوریزه، خیابان فتح ۱۱ (آریسمان)، کوچه گلبن ۵ شرقی، پلاک ۵",
         // لینک مستقیم پیام‌رسان‌ها. اگر خالی باشد:
         //  - تلگرام و واتس‌اپ با شماره‌ی بالا ساخته می‌شوند
@@ -1655,12 +1621,6 @@
         return Promise.resolve(fallbackCopy(text));
     }
 
-    function copyPhone() {
-        copyText(CONFIG.phone).then(function (ok) {
-            showBottomToast(ok ? "شماره کپی شد." : "کپی انجام نشد: " + toFa(CONFIG.phone), ok ? "success" : "");
-        });
-    }
-
     function loadNeshanMap() {
         if (!CONFIG.neshanKey) return;
         const css = document.createElement("link");
@@ -1678,6 +1638,7 @@
                     key: CONFIG.neshanKey,
                     maptype: "neshan",
                     poi: true,
+                    controls: [new ol.control.Zoom({ zoomInLabel: "+", zoomOutLabel: "−" })],
                     traffic: false,
                     view: new ol.View({ center: ol.proj.fromLonLat([CONFIG.lng, CONFIG.lat]), zoom: 16 })
                 });
@@ -1689,12 +1650,6 @@
         document.head.appendChild(sc);
     }
 
-    function copyCoords() {
-        copyText(CONFIG.lat + ", " + CONFIG.lng).then(function (ok) {
-            showBottomToast(ok ? "موقعیت کپی شد." : "کپی انجام نشد.", ok ? "success" : "");
-        });
-    }
-
     function openMessenger(id) {
         const url = getLink(id);
         if (url) {
@@ -1702,13 +1657,7 @@
             return;
         }
         const m = MESSENGERS.filter(function (x) { return x.id === id; })[0];
-        copyText(CONFIG.phone).then(function (ok) {
-            showBottomToast(
-                ok ? "شماره کپی شد. آن را در «" + m.name + "» جستجو کنید و فایل را بفرستید."
-                   : "شماره را در «" + m.name + "» جستجو کنید: " + toFa(CONFIG.phone),
-                "success"
-            );
-        });
+        showBottomToast("لینک «" + m.name + "» هنوز تنظیم نشده است.");
     }
 
     function renderMessengers(containerId) {
@@ -1726,13 +1675,9 @@
     function initSite() {
         document.title = CONFIG.brand + " | استعلام قیمت ساخت قطعات صنعتی";
         document.querySelectorAll(".js-brand").forEach(function (el) { el.textContent = CONFIG.brand; });
-        document.querySelectorAll(".js-phone").forEach(function (el) { el.textContent = toFa(CONFIG.phone); });
         document.getElementById("addressText").textContent = CONFIG.address;
         document.getElementById("mapLink").href = CONFIG.mapUrl;
         document.getElementById("mapNeshan").href = CONFIG.mapUrl;
-        document.getElementById("mapAddr").textContent = CONFIG.address;
-        document.getElementById("mapCoords").textContent =
-            toFa(String(CONFIG.lat)).replace(".", "٫") + "، " + toFa(String(CONFIG.lng)).replace(".", "٫");
         document.getElementById("mapFallback").href = CONFIG.mapUrl;
         loadNeshanMap();
         try {
